@@ -11,7 +11,9 @@ development machine.
 
 ## Installation
 
-```shell
+```powershell
+Set-ExecutionPolicy RemoteSigned
+.\Install-Hephaestus.ps1
 ```
 
 ## Etymology
