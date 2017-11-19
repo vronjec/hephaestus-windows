@@ -36,6 +36,27 @@ Workflow Install-Hephaestus
             # Install latest LastPass browser extensions
             Invoke-WebRequest "https://lastpass.com/download/cdn/lastpass_x64.exe" -OutFile "$env:temp\LastPassSetup.exe"
             Start-Process -FilePath "$env:temp\LastPassSetup.exe" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Wait
+
+            # TODO: Microsoft Office
+            # TODO: Adobe Creative Cloud
+            # TODO: File Optimizer
+            # TODO: FileZilla Client
+
+            # Install Visual Studio Code
+            # TODO: Add version-agnostic download link to latest release
+            Invoke-WebRequest "https://go.microsoft.com/fwlink/?Linkid=852157" -OutFile "$env:temp\VSCodeSetup.exe"
+            Start-Process -FilePath "$env:temp\VSCodeSetup.exe" -ArgumentList "/VERYSILENT /MERGETASKS=!runcode" -Wait
+
+            # Install JetBrains Toolbox
+            # TODO: Add version-agnostic download link to latest release
+            Invoke-WebRequest "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe" -OutFile "$env:temp\JetBrainsSetup.exe"
+            Start-Process -FilePath "$env:temp\JetBrainsSetup.exe" -ArgumentList "/S /NoDesktopIcon" -Wait
+
+            # Install Docker CE for Windows
+            Invoke-WebRequest "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe" -OutFile "$env:temp\DockerSetup.exe"
+            Start-Process -FilePath "$env:temp\DockerSetup.exe" -ArgumentList "install --quiet" -Wait
+
+            #TODO: Devilbox
         } # Sequence
 
     } # Parallel
