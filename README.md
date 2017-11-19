@@ -7,7 +7,7 @@ development machine.
 
 ## Requirements
 
-*   
+*   Windows 10 Professional
 
 ## Installation
 
