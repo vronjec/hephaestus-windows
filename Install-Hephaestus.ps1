@@ -40,7 +40,9 @@ Workflow Install-Hephaestus
             Invoke-WebRequest "https://lastpass.com/download/cdn/lastpass_x64.exe" -OutFile "$env:temp\LastPassSetup.exe"
             Start-Process -FilePath "$env:temp\LastPassSetup.exe" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Wait
 
-            # TODO: Slack
+            # Install Slack
+            Invoke-WebRequest "https://slack.com/ssb/download-win64" -OutFile "$env:temp\SlackSetup.exe"
+            Start-Process -FilePath "$env:temp\SlackSetup.exe" -ArgumentList "-s" -Wait
 
             # Install Discord
             Invoke-WebRequest "https://discordapp.com/api/download?platform=win" -OutFile "$env:temp\DiscordSetup.exe"
