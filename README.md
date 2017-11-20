@@ -5,6 +5,14 @@
 An automation script for installing and configuring a Windows 10-based
 development machine.
 
+## Features
+
+*   Disable System Restore temporarily for improved performance and
+    create an initial system restore point when done
+*   Install Chrome, Firefox and Opera with LastPass browser extension
+*   Enable Windows Subsystem for Linux (WSL)
+*   Enable Hyper-V and install Docker CE for Windows
+
 ## Requirements
 
 *   Windows 10 Professional
