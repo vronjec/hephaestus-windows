@@ -41,8 +41,15 @@ Workflow Install-Hephaestus
             Start-Process -FilePath "$env:temp\LastPassSetup.exe" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Wait
 
             # TODO: Slack
-            # TODO: Discord
-            # TODO: Steam
+
+            # Install Discord
+            Invoke-WebRequest "https://discordapp.com/api/download?platform=win" -OutFile "$env:temp\DiscordSetup.exe"
+            Start-Process -FilePath "$env:temp\DiscordSetup.exe" -ArgumentList "-s" -Wait
+
+            # Install Steam
+            Invoke-WebRequest "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe" -OutFile "$env:temp\SteamSetup.exe"
+            Start-Process -FilePath "$env:temp\SteamSetup.exe" -ArgumentList "/S" -Wait
+
             # TODO: Microsoft Office
             # TODO: Adobe Creative Cloud
             # TODO: File Optimizer
