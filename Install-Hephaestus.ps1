@@ -14,10 +14,10 @@ Workflow Install-Hephaestus
             }
 
             # Enable Hyper-V
-            Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All
+            Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All -NoRestart 
 
             # Enable Windows Subsystem for Linux
-            Enable-WindowsOptionalFeature -FeatureName Microsoft-Windows-Subsystem-Linux -Online -All -LimitAccess -NoRestart -ErrorAction Stop
+            Enable-WindowsOptionalFeature -FeatureName Microsoft-Windows-Subsystem-Linux -Online -All -NoRestart 
         } # Sequence
 
         Sequence {
