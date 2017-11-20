@@ -22,14 +22,17 @@ Workflow Install-Hephaestus
 
         Sequence {
             # Install latest Chrome
+            # TODO: Remove desktop icon
             Invoke-WebRequest "https://dl.google.com/chrome/install/375.126/chrome_installer.exe" -OutFile "$env:temp\ChromeSetup.exe"
             Start-Process -FilePath "$env:temp\ChromeSetup.exe" -ArgumentList "/install /silent" -Wait
 
             # Install latest Firefox
+            # TODO: Remove desktop icon
             Invoke-WebRequest "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US" -OutFile "$env:temp\FirefoxSetup.exe"
             Start-Process -FilePath "$env:temp\FirefoxSetup.exe" -ArgumentList "-ms" -Wait
 
             # Install latest Opera
+            # TODO: Remove desktop icon
             Invoke-WebRequest "https://net.geo.opera.com/opera/stable/windows" -OutFile "$env:temp\OperaSetup.exe"
             Start-Process -FilePath "$env:temp\OperaSetup.exe" -ArgumentList "/silent /launchopera 0" -Wait
 
@@ -37,10 +40,14 @@ Workflow Install-Hephaestus
             Invoke-WebRequest "https://lastpass.com/download/cdn/lastpass_x64.exe" -OutFile "$env:temp\LastPassSetup.exe"
             Start-Process -FilePath "$env:temp\LastPassSetup.exe" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Wait
 
+            # TODO: Slack
+            # TODO: Discord
+            # TODO: Steam
             # TODO: Microsoft Office
             # TODO: Adobe Creative Cloud
             # TODO: File Optimizer
             # TODO: FileZilla Client
+            # TODO: Git
 
             # Install Visual Studio Code
             # TODO: Add version-agnostic download link to latest release
