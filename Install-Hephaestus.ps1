@@ -10,7 +10,7 @@ Workflow Install-Hephaestus
         Sequence {
             # Set computer name
             Switch -CaseSensitive ((Get-WmiObject -Class Win32_BIOS).SerialNumber) {
-                "MP0ARBG" { Rename-Computer -NewName "Hephaestus" -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue }
+                "MP0ARBG" { Rename-Computer -NewName "hephaestus" -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue }
             }
 
             # Enable Hyper-V
@@ -28,7 +28,7 @@ Workflow Install-Hephaestus
             $Installer = "ChromeSetup.msi"
             Invoke-WebRequest "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi" -OutFile "$Path\$Installer"
             Start-Process -FilePath msiexec -ArgumentList "/i $Path\$Installer /quiet" -Wait
-            
+
             # Install latest Firefox
             # TODO: Remove desktop icon
             $Installer = "FirefoxSetup.exe"
