@@ -17,6 +17,7 @@ development machine.
 
 *   Windows 10 Professional
 *   Hardware support for Hyper-V virtualization technology
+*   Internet connectivity
 
 ## Recommendations
 
