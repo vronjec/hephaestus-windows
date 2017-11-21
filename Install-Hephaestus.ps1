@@ -61,6 +61,9 @@ Workflow Install-Hephaestus
             Invoke-WebRequest "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe" -OutFile "$Path\$Installer"
             Start-Process -FilePath "$Path\$Installer" -ArgumentList "/S" -Wait
 
+            # TODO: Spotify
+            # TODO: nomacs
+            # TODO: MPC-HC
             # TODO: Microsoft Office
             # TODO: Adobe Creative Cloud
             # TODO: File Optimizer
