@@ -46,17 +46,17 @@ Workflow Install-Hephaestus
             Invoke-WebRequest "https://lastpass.com/download/cdn/lastpass_x64.exe" -OutFile "$Path\$Installer"
             Start-Process -FilePath "$Path\$Installer" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Wait
 
-            # Install Slack
+            # Install latest Slack
             $Installer = "SlackSetup.exe"
             Invoke-WebRequest "https://slack.com/ssb/download-win64" -OutFile "$Path\$Installer"
             Start-Process -FilePath "$Path\$Installer" -ArgumentList "-s" -Wait
 
-            # Install Discord
+            # Install latest Discord
             $Installer = "DiscordSetup.exe"
             Invoke-WebRequest "https://discordapp.com/api/download?platform=win" -OutFile "$Path\$Installer"
             Start-Process -FilePath "$Path\$Installer" -ArgumentList "-s" -Wait
 
-            # Install Steam
+            # Install latest Steam
             $Installer = "SteamSetup.exe"
             Invoke-WebRequest "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe" -OutFile "$Path\$Installer"
             Start-Process -FilePath "$Path\$Installer" -ArgumentList "/S" -Wait
@@ -79,7 +79,7 @@ Workflow Install-Hephaestus
             Invoke-WebRequest "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe" -OutFile "$Path\$Installer"
             Start-Process -FilePath "$Path\$Installer" -ArgumentList "/S /NoDesktopIcon" -Wait
 
-            # Install Docker CE for Windows
+            # Install latest Docker CE for Windows
             $Installer = "DockerSetup.exe"
             Invoke-WebRequest "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe" -OutFile "$Path\$Installer"
             Start-Process -FilePath "$Path\$Installer" -ArgumentList "install --quiet" -Wait
