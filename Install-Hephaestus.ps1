@@ -23,8 +23,8 @@ Workflow Install-Hephaestus
         Sequence {
             # Install latest Chrome
             # TODO: Remove desktop icon
-            Invoke-WebRequest "https://dl.google.com/chrome/install/latest/chrome_installer.exe" -OutFile "$env:temp\ChromeSetup.exe"
-            Start-Process -FilePath "$env:temp\ChromeSetup.exe" -ArgumentList "/install /silent" -Wait
+            Invoke-WebRequest "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi" -OutFile "$env:temp\ChromeSetup.msi"
+            Start-Process -FilePath msiexec -ArgumentList "/i $env:temp\ChromeSetup.msi /quiet" -Wait
 
             # Install latest Firefox
             # TODO: Remove desktop icon
