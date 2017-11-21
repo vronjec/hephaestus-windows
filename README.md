@@ -17,6 +17,11 @@ development machine.
 
 *   Windows 10 Professional
 
+## Recommendations
+
+*   Perform a clean installation of Windows 10 Fall Creators Update or
+    newer before running the script
+
 ## Installation
 
 ```powershell
