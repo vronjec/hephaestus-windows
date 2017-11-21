@@ -21,36 +21,45 @@ Workflow Install-Hephaestus
         } # Sequence
 
         Sequence {
+            $Path = $env:TEMP
+
             # Install latest Chrome
             # TODO: Remove desktop icon
-            Invoke-WebRequest "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi" -OutFile "$env:temp\ChromeSetup.msi"
-            Start-Process -FilePath msiexec -ArgumentList "/i $env:temp\ChromeSetup.msi /quiet" -Wait
-
+            $Installer = "ChromeSetup.msi"
+            Invoke-WebRequest "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi" -OutFile "$Path\$Installer"
+            Start-Process -FilePath msiexec -ArgumentList "/i $Path\$Installer /quiet" -Wait
+            
             # Install latest Firefox
             # TODO: Remove desktop icon
-            Invoke-WebRequest "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US" -OutFile "$env:temp\FirefoxSetup.exe"
-            Start-Process -FilePath "$env:temp\FirefoxSetup.exe" -ArgumentList "-ms" -Wait
+            $Installer = "FirefoxSetup.exe"
+            Invoke-WebRequest "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US" -OutFile "$Path\$Installer"
+            Start-Process -FilePath "$Path\$Installer" -ArgumentList "-ms" -Wait
 
             # Install latest Opera
             # TODO: Remove desktop icon
-            Invoke-WebRequest "https://net.geo.opera.com/opera/stable/windows" -OutFile "$env:temp\OperaSetup.exe"
-            Start-Process -FilePath "$env:temp\OperaSetup.exe" -ArgumentList "/silent /launchopera 0" -Wait
+            $Installer = "OperaSetup.exe"
+            Invoke-WebRequest "https://net.geo.opera.com/opera/stable/windows" -OutFile "$Path\$Installer"
+            Start-Process -FilePath "$Path\$Installer" -ArgumentList "/silent /launchopera 0" -Wait
 
             # Install latest LastPass browser extensions
-            Invoke-WebRequest "https://lastpass.com/download/cdn/lastpass_x64.exe" -OutFile "$env:temp\LastPassSetup.exe"
-            Start-Process -FilePath "$env:temp\LastPassSetup.exe" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Wait
+            $Installer = "LastPassSetup.exe"
+            Invoke-WebRequest "https://lastpass.com/download/cdn/lastpass_x64.exe" -OutFile "$Path\$Installer"
+            Start-Process -FilePath "$Path\$Installer" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Wait
 
             # Install Slack
-            Invoke-WebRequest "https://slack.com/ssb/download-win64" -OutFile "$env:temp\SlackSetup.exe"
-            Start-Process -FilePath "$env:temp\SlackSetup.exe" -ArgumentList "-s" -Wait
+            $Installer = "SlackSetup.exe"
+            Invoke-WebRequest "https://slack.com/ssb/download-win64" -OutFile "$Path\$Installer"
+            Start-Process -FilePath "$Path\$Installer" -ArgumentList "-s" -Wait
 
             # Install Discord
-            Invoke-WebRequest "https://discordapp.com/api/download?platform=win" -OutFile "$env:temp\DiscordSetup.exe"
-            Start-Process -FilePath "$env:temp\DiscordSetup.exe" -ArgumentList "-s" -Wait
+            $Installer = "DiscordSetup.exe"
+            Invoke-WebRequest "https://discordapp.com/api/download?platform=win" -OutFile "$Path\$Installer"
+            Start-Process -FilePath "$Path\$Installer" -ArgumentList "-s" -Wait
 
             # Install Steam
-            Invoke-WebRequest "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe" -OutFile "$env:temp\SteamSetup.exe"
-            Start-Process -FilePath "$env:temp\SteamSetup.exe" -ArgumentList "/S" -Wait
+            $Installer = "SteamSetup.exe"
+            Invoke-WebRequest "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe" -OutFile "$Path\$Installer"
+            Start-Process -FilePath "$Path\$Installer" -ArgumentList "/S" -Wait
 
             # TODO: Microsoft Office
             # TODO: Adobe Creative Cloud
@@ -60,17 +69,20 @@ Workflow Install-Hephaestus
 
             # Install Visual Studio Code
             # TODO: Add version-agnostic download link to latest release
-            Invoke-WebRequest "https://go.microsoft.com/fwlink/?Linkid=852157" -OutFile "$env:temp\VSCodeSetup.exe"
-            Start-Process -FilePath "$env:temp\VSCodeSetup.exe" -ArgumentList "/VERYSILENT /MERGETASKS=!runcode" -Wait
+            $Installer = "VSCodeSetup.exe"
+            Invoke-WebRequest "https://go.microsoft.com/fwlink/?Linkid=852157" -OutFile "$Path\$Installer"
+            Start-Process -FilePath "$Path\$Installer" -ArgumentList "/VERYSILENT /MERGETASKS=!runcode" -Wait
 
             # Install JetBrains Toolbox
             # TODO: Add version-agnostic download link to latest release
-            Invoke-WebRequest "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe" -OutFile "$env:temp\JetBrainsSetup.exe"
-            Start-Process -FilePath "$env:temp\JetBrainsSetup.exe" -ArgumentList "/S /NoDesktopIcon" -Wait
+            $Installer = "JetBrainsSetup.exe"
+            Invoke-WebRequest "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe" -OutFile "$Path\$Installer"
+            Start-Process -FilePath "$Path\$Installer" -ArgumentList "/S /NoDesktopIcon" -Wait
 
             # Install Docker CE for Windows
-            Invoke-WebRequest "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe" -OutFile "$env:temp\DockerSetup.exe"
-            Start-Process -FilePath "$env:temp\DockerSetup.exe" -ArgumentList "install --quiet" -Wait
+            $Installer = "DockerSetup.exe"
+            Invoke-WebRequest "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe" -OutFile "$Path\$Installer"
+            Start-Process -FilePath "$Path\$Installer" -ArgumentList "install --quiet" -Wait
 
             #TODO: Devilbox
         } # Sequence
