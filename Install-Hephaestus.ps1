@@ -1,5 +1,13 @@
 Import-Module PSWorkflow
 
+function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
+    $Path = $env:TEMP
+
+    Invoke-WebRequest "$Uri" -OutFile "$Path\$Installer"
+    Start-Process -FilePath "$Path\$Installer" -ArgumentList "$ArgumentList" -Wait
+    Remove-Item "$Path\$Installer"
+}
+
 Workflow Install-Hephaestus
 {
     # Disable System Restore
@@ -21,8 +29,6 @@ Workflow Install-Hephaestus
         } # Sequence
 
         Sequence {
-            $Path = $env:TEMP
-
             # Install latest Chrome
             # TODO: Remove desktop icon
             $Installer = "ChromeSetup.msi"
@@ -32,45 +38,27 @@ Workflow Install-Hephaestus
 
             # Install latest Firefox
             # TODO: Remove desktop icon
-            $Installer = "FirefoxSetup.exe"
-            Invoke-WebRequest "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US" -OutFile "$Path\$Installer"
-            Start-Process -FilePath "$Path\$Installer" -ArgumentList "-ms" -Wait
-            Remove-Item "$Path\$Installer"
+            Install-WebRequest -Installer "FirefoxSetup.exe" -ArgumentList "-ms" -Uri "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
 
             # Install latest Opera
             # TODO: Remove desktop icon
-            $Installer = "OperaSetup.exe"
-            Invoke-WebRequest "https://net.geo.opera.com/opera/stable/windows" -OutFile "$Path\$Installer"
-            Start-Process -FilePath "$Path\$Installer" -ArgumentList "/silent /launchopera 0" -Wait
-            Remove-Item "$Path\$Installer"
+            Install-WebRequest -Installer "OperaSetup.exe" -ArgumentList "/silent /launchopera 0" -Uri "https://net.geo.opera.com/opera/stable/windows"
 
             # Install latest LastPass browser extensions
-            $Installer = "LastPassSetup.exe"
-            Invoke-WebRequest "https://lastpass.com/download/cdn/lastpass_x64.exe" -OutFile "$Path\$Installer"
-            Start-Process -FilePath "$Path\$Installer" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Wait
-            Remove-Item "$Path\$Installer"
+            Install-WebRequest -Installer "LastPassSetup.exe" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Uri "https://lastpass.com/download/cdn/lastpass_x64.exe"
 
             # Install latest Slack
-            $Installer = "SlackSetup.exe"
-            Invoke-WebRequest "https://slack.com/ssb/download-win64" -OutFile "$Path\$Installer"
-            Start-Process -FilePath "$Path\$Installer" -ArgumentList "-s" -Wait
-            Remove-Item "$Path\$Installer"
+            Install-WebRequest -Installer "SlackSetup.exe" -ArgumentList "-s" -Uri "https://slack.com/ssb/download-win64"
 
             # Install latest Steam
-            $Installer = "SteamSetup.exe"
-            Invoke-WebRequest "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe" -OutFile "$Path\$Installer"
-            Start-Process -FilePath "$Path\$Installer" -ArgumentList "/S" -Wait
-            Remove-Item "$Path\$Installer"
+            Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
 
             # TODO: Spotify
             # TODO: nomacs
 
             # Install MPC-HC
             # TODO: Add version-agnostic download link to latest release
-            $Installer = "MPCHCSetup.exe"
-            Invoke-WebRequest "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe" -OutFile "$Path\$Installer"
-            Start-Process -FilePath "$Path\$Installer" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Wait
-            Remove-Item "$Path\$Installer"
+            Install-WebRequest -Installer "MPCHCSetup.exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
 
             # TODO: Microsoft Office
             # TODO: Adobe Creative Cloud
@@ -80,23 +68,14 @@ Workflow Install-Hephaestus
 
             # Install Visual Studio Code
             # TODO: Add version-agnostic download link to latest release
-            $Installer = "VSCodeSetup.exe"
-            Invoke-WebRequest "https://go.microsoft.com/fwlink/?Linkid=852157" -OutFile "$Path\$Installer"
-            Start-Process -FilePath "$Path\$Installer" -ArgumentList "/VERYSILENT /MERGETASKS=!runcode" -Wait
-            Remove-Item "$Path\$Installer"
+            Install-WebRequest -Installer "VSCodeSetup.exe" -ArgumentList "/VERYSILENT /MERGETASKS=!runcode" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
 
             # Install JetBrains Toolbox
             # TODO: Add version-agnostic download link to latest release
-            $Installer = "JetBrainsSetup.exe"
-            Invoke-WebRequest "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe" -OutFile "$Path\$Installer"
-            Start-Process -FilePath "$Path\$Installer" -ArgumentList "/S /NoDesktopIcon" -Wait
-            Remove-Item "$Path\$Installer"
+            Install-WebRequest -Installer "JetBrainsSetup.exe" -ArgumentList "/S /NoDesktopIcon" -Uri "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe"
 
             # Install latest Docker CE for Windows
-            $Installer = "DockerSetup.exe"
-            Invoke-WebRequest "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe" -OutFile "$Path\$Installer"
-            Start-Process -FilePath "$Path\$Installer" -ArgumentList "install --quiet" -Wait
-            Remove-Item "$Path\$Installer"
+            Install-WebRequest -Installer "DockerSetup.exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
 
             #TODO: Devilbox
         } # Sequence
