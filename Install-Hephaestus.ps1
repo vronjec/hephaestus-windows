@@ -57,6 +57,9 @@ Workflow Install-Hephaestus
             # Install latest Slack
             Install-WebRequest -Installer "SlackSetup.exe" -ArgumentList "-s" -Uri "https://slack.com/ssb/download-win64"
 
+            # Install latest Skype Classic
+            Install-WebRequest -Installer "SkypeSetup.exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
+
             # Install latest Steam
             Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
 
