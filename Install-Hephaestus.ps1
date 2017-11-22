@@ -35,7 +35,11 @@ Workflow Install-Hephaestus
             Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All -NoRestart 
 
             # Enable Windows Subsystem for Linux
-            Enable-WindowsOptionalFeature -FeatureName Microsoft-Windows-Subsystem-Linux -Online -All -NoRestart 
+            Enable-WindowsOptionalFeature -FeatureName Microsoft-Windows-Subsystem-Linux -Online -All -NoRestart
+
+            # TODO: Configure WSL after reboot
+            # WSL> adduser wicwega
+            # CMD> ubuntu config --default-user wicwega
         } # Sequence
 
         Sequence {
