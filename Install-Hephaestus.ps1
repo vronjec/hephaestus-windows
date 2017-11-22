@@ -1,11 +1,17 @@
 Import-Module PSWorkflow
 
 function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
-    $Path = $env:TEMP
+    $FilePath = "$env:TEMP\$Installer"
 
-    Invoke-WebRequest "$Uri" -OutFile "$Path\$Installer"
-    Start-Process -FilePath "$Path\$Installer" -ArgumentList "$ArgumentList" -Wait
-    Remove-Item "$Path\$Installer"
+    Invoke-WebRequest "$Uri" -OutFile "$FilePath"
+
+    Switch ([IO.Path]::GetExtension("$FilePath")) {
+        default {
+            Start-Process -FilePath "$FilePath" -ArgumentList "$ArgumentList" -Wait
+        }
+    }
+
+    Remove-Item "$FilePath"
 }
 
 Workflow Install-Hephaestus
