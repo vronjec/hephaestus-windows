@@ -6,6 +6,10 @@ function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
     Invoke-WebRequest "$Uri" -OutFile "$FilePath"
 
     Switch ([IO.Path]::GetExtension("$FilePath")) {
+        ".msi" {
+            Start-Process -FilePath msiexec -ArgumentList "/i $FilePath $ArgumentList" -Wait
+        }
+
         default {
             Start-Process -FilePath "$FilePath" -ArgumentList "$ArgumentList" -Wait
         }
@@ -37,10 +41,7 @@ Workflow Install-Hephaestus
         Sequence {
             # Install latest Chrome
             # TODO: Remove desktop icon
-            $Installer = "ChromeSetup.msi"
-            Invoke-WebRequest "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi" -OutFile "$Path\$Installer"
-            Start-Process -FilePath msiexec -ArgumentList "/i $Path\$Installer /quiet" -Wait
-            Remove-Item "$Path\$Installer"
+            Install-WebRequest -Installer "ChromeSetup.msi" -ArgumentList "/quiet" -Uri "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi"
 
             # Install latest Firefox
             # TODO: Remove desktop icon
