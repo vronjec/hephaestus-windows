@@ -51,11 +51,6 @@ Workflow Install-Hephaestus
             Invoke-WebRequest "https://slack.com/ssb/download-win64" -OutFile "$Path\$Installer"
             Start-Process -FilePath "$Path\$Installer" -ArgumentList "-s" -Wait
 
-            # Install latest Discord
-            $Installer = "DiscordSetup.exe"
-            Invoke-WebRequest "https://discordapp.com/api/download?platform=win" -OutFile "$Path\$Installer"
-            Start-Process -FilePath "$Path\$Installer" -ArgumentList "-s" -Wait
-
             # Install latest Steam
             $Installer = "SteamSetup.exe"
             Invoke-WebRequest "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe" -OutFile "$Path\$Installer"
