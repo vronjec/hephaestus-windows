@@ -58,7 +58,13 @@ Workflow Install-Hephaestus
 
             # TODO: Spotify
             # TODO: nomacs
-            # TODO: MPC-HC
+
+            # Install MPC-HC
+            # TODO: Add version-agnostic download link to latest release
+            $Installer = "MPCHCSetup.exe"
+            Invoke-WebRequest "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe" -OutFile "$Path\$Installer"
+            Start-Process -FilePath "$Path\$Installer" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Wait
+
             # TODO: Microsoft Office
             # TODO: Adobe Creative Cloud
             # TODO: File Optimizer
