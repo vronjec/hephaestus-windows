@@ -79,7 +79,9 @@ Workflow Install-Hephaestus
             Remove-DesktopShortcut -ShortcutLabel "Steam"
 
             # TODO: Spotify
-            # TODO: nomacs
+
+            # Install latest Nomacs
+            Install-WebRequest -Installer "NomacsSetup.msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
 
             # Install MPC-HC
             # TODO: Add version-agnostic download link to latest release
