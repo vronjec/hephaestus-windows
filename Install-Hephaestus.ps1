@@ -18,6 +18,12 @@ function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
     Remove-Item "$FilePath"
 }
 
+function Remove-DesktopShortcut ($ShortcutLabel) {
+    $FilePath = "${env:USERPROFILE}\Desktop\${ShortcutLabel}.lnk"
+
+    Remove-Item "$FilePath"
+}
+
 Workflow Install-Hephaestus
 {
     # Disable System Restore
@@ -44,8 +50,8 @@ Workflow Install-Hephaestus
 
         Sequence {
             # Install latest Chrome
-            # TODO: Remove desktop icon
             Install-WebRequest -Installer "ChromeSetup.msi" -ArgumentList "/quiet" -Uri "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi"
+            Remove-DesktopShortcut -ShortcutLabel "Google Chrome"
 
             # Install latest Firefox
             # TODO: Remove desktop icon
@@ -60,12 +66,15 @@ Workflow Install-Hephaestus
 
             # Install latest Slack
             Install-WebRequest -Installer "SlackSetup.exe" -ArgumentList "-s" -Uri "https://slack.com/ssb/download-win64"
+            Remove-DesktopShortcut -ShortcutLabel "Slack"
 
             # Install latest Skype Classic
             Install-WebRequest -Installer "SkypeSetup.exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
+            Remove-DesktopShortcut -ShortcutLabel "Skype"
 
             # Install latest Steam
             Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
+            Remove-DesktopShortcut -ShortcutLabel "Steam"
 
             # TODO: Spotify
             # TODO: nomacs
@@ -73,6 +82,7 @@ Workflow Install-Hephaestus
             # Install MPC-HC
             # TODO: Add version-agnostic download link to latest release
             Install-WebRequest -Installer "MPCHCSetup.exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
+            Remove-DesktopShortcut -ShortcutLabel "MPC-HC x64"
 
             # TODO: Microsoft Office
             # TODO: Adobe Creative Cloud
