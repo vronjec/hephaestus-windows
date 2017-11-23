@@ -45,6 +45,8 @@ Workflow Install-Hephaestus
 
             # TODO: Configure WSL after reboot
             # WSL> adduser wicwega
+            # WSL> adduser wicwega sudo
+            # WSL> apt-get install mc ...
             # CMD> ubuntu config --default-user wicwega
         } # Sequence
 
