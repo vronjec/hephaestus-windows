@@ -92,7 +92,11 @@ Workflow Install-Hephaestus
             # TODO: Adobe Creative Cloud
             # TODO: File Optimizer
             # TODO: FileZilla Client
-            # TODO: Git
+
+            # Install Git
+            # TODO: Refine installation: https://github.com/msysgit/msysgit/wiki/Silent-or-Unattended-Installation
+            # TODO: Add version-agnostic download link to latest release
+            Install-WebRequest -Installer "GitSetup.exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"
 
             # Install Visual Studio Code
             # TODO: Add version-agnostic download link to latest release
