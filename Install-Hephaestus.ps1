@@ -89,7 +89,15 @@ Workflow Install-Hephaestus
             Remove-DesktopShortcut -ShortcutLabel "MPC-HC x64"
 
             # TODO: Microsoft Office
-            # TODO: Adobe Creative Cloud
+
+            # Install Adobe Creative Cloud desktop application
+            # TODO: Add version-agnostic download link to latest release
+            # Invoke-WebRequest "http://ccmdl.adobe.com/AdobeProducts/KCCC/1/win32/ACCCx4_3_0_256.zip" -OutFile "$env:TEMP\CreativeCloud.zip"
+            # TODO: Implement function to unzip archive to given path
+            # Extract-Archive -Archive "$env:TEMP\CreativeCloud.zip" -OutDirectory "$env:TEMP"
+            # TODO: Implement function to initiate installer at given path
+            # Invoke-Installer -Installer "$env:TEMP\ACCCx4_3_0_256\Set-up.exe" -ArgumentList "--silent"
+
             # TODO: File Optimizer
             # TODO: FileZilla Client
 
