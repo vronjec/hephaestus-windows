@@ -39,7 +39,7 @@ mythology, he is the son of Zeus and Hera, brother of Athena,
 and consort of Aphrodite. He built automatons of metal to work for him,
 and made all the weapons of the gods. In some versions of the myth,
 Prometheus stole the fire that he gave to man from Hephaestus's forge.
-(Summary based on Wikipedia article
+(Summary based on [Wikipedia](https://www.wikipedia.org/) article
 "[Hephaestus](https://en.wikipedia.org/wiki/Hephaestus)")
 
 ## License
