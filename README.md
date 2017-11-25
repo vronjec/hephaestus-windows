@@ -1,4 +1,4 @@
-# Hephaestus
+# Hephaestus: The development machine
 
 ## Introduction
 
