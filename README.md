@@ -16,7 +16,7 @@ development machine.
 ## Requirements
 
 *   Windows 10 Professional
-*   Hardware support for Hyper-V virtualization technology
+*   Hardware support for Hyper-V virtualization
 *   Internet connectivity
 
 ## Recommendations
