@@ -46,7 +46,7 @@ Workflow Install-Hephaestus
             # TODO: Configure WSL after reboot
             # WSL> adduser wicwega
             # WSL> adduser wicwega sudo
-            # WSL> apt-get install mc ...
+            # WSL> apt-get install tree mc...
             # CMD> ubuntu config --default-user wicwega
         } # Sequence
 
@@ -88,6 +88,7 @@ Workflow Install-Hephaestus
             Install-WebRequest -Installer "MPCHCSetup.exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
             Remove-DesktopShortcut -ShortcutLabel "MPC-HC x64"
 
+            # TODO: PeaZip
             # TODO: Microsoft Office
 
             # Install Adobe Creative Cloud desktop application
@@ -113,6 +114,9 @@ Workflow Install-Hephaestus
             # Install JetBrains Toolbox
             # TODO: Add version-agnostic download link to latest release
             Install-WebRequest -Installer "JetBrainsSetup.exe" -ArgumentList "/S /NoDesktopIcon" -Uri "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe"
+
+            # TODO: Java Development Kit
+            # TODO: Android Studio
 
             # Install latest Docker CE for Windows
             Install-WebRequest -Installer "DockerSetup.exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
