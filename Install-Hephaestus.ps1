@@ -117,6 +117,7 @@ Workflow Install-Hephaestus
 
             # TODO: Java Development Kit
             # TODO: Android Studio
+            # TODO: Visual Studio Emulator for Android (https://aka.ms/vscomemudownload)
 
             # Install latest Docker CE for Windows
             Install-WebRequest -Installer "DockerSetup.exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
