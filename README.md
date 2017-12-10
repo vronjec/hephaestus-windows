@@ -1,4 +1,4 @@
-# Hephaestus: The development machine
+# Hephaestus: The Windows development machine
 
 ## Introduction
 
