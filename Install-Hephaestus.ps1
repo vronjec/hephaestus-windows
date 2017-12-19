@@ -122,7 +122,28 @@ Workflow Install-Hephaestus
             # Install latest Docker CE for Windows
             Install-WebRequest -Installer "DockerSetup.exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
 
-            #TODO: Devilbox
+            # TODO: Devilbox
+
+            # TODO: PHP 5.6
+            # TODO: PHP 7.0
+            # TODO: PHP 7.1
+            # TODO: PHP 7.2
+
+            # TODO: Install Microsoft ODBC Driver 11
+            # Install MsSQL-ODBC-11.msi
+            # TODO: Microsoft PHP Driver for SQL Server 3.2
+            # Install PHP extension MsSQL-PHP-3.2.exe to PHP 5.6 ext/ directory
+            # Enable PHP extension in PHP 5.6
+
+            # TODO: Install Microsoft ODBC Driver 13
+            # Install MsSQL-ODBC-13.msi
+            # TODO: Microsoft PHP Driver for SQL Server 4.0
+            # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.0 ext/ directory
+            # Enable PHP extension in PHP 7.0
+            # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.1 ext/ directory
+            # Enable PHP extension in PHP 7.1
+            # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.2 ext/ directory
+            # Enable PHP extension in PHP 7.2
         } # Sequence
 
     } # Parallel
