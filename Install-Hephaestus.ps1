@@ -37,7 +37,7 @@ Workflow Install-Hephaestus
     $path = (Get-Process -id $pid).Path
     $balloon.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($path)
     $balloon.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::Info
-    $balloon.BalloonTipTitle = "Hephaestus installation"
+    $balloon.BalloonTipTitle = "Hephaestus"
     # [System.Windows.Forms.ToolTipIcon] | Get-Member -Static -Type Property
     $balloon.BalloonTipText = 'What do you think of this balloon tip?'
     $balloon.Visible = $true
