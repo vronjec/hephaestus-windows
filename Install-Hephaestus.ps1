@@ -1,7 +1,5 @@
 Import-Module PSWorkflow
 
-Add-Type -AssemblyName System.Windows.Forms
-
 function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
     $FilePath = "$env:TEMP\$Installer"
 
@@ -31,18 +29,6 @@ function Remove-DesktopShortcut ($ShortcutLabel) {
 
 Workflow Install-Hephaestus
 {
-    $Global:balloon = New-Object System.Windows.Forms.NotifyIcon
-    #Get-Member -InputObject  $Global:balloon
-
-    $path = (Get-Process -id $pid).Path
-    $balloon.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($path)
-    $balloon.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::Info
-    $balloon.BalloonTipTitle = "Hephaestus"
-    # [System.Windows.Forms.ToolTipIcon] | Get-Member -Static -Type Property
-    $balloon.BalloonTipText = 'What do you think of this balloon tip?'
-    $balloon.Visible = $true
-    $balloon.ShowBalloonTip(5000)
-
     # Disable System Restore
     Disable-ComputerRestore -Drive "C:\"
 
@@ -74,42 +60,32 @@ Workflow Install-Hephaestus
             # Install latest Chrome
             Install-WebRequest -Installer "ChromeSetup.msi" -ArgumentList "/quiet" -Uri "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi"
             Remove-DesktopShortcut -ShortcutLabel "Google Chrome"
-            $balloon.BalloonTipText = "Google Chrome installation complete"
-            $balloon.ShowBalloonTip(5000)
-
+ 
             # Install latest Firefox
             # TODO: Remove desktop icon
             Install-WebRequest -Installer "FirefoxSetup.exe" -ArgumentList "-ms" -Uri "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
-            $balloon.BalloonTipText = "Mozilla Firefox installation complete"
-            $balloon.ShowBalloonTip(5000)
-
+            Remove-DesktopShortcut -ShortcutLabel "Mozilla Firefox"
+ 
             # Install latest Opera
             # TODO: Remove desktop icon
             Install-WebRequest -Installer "OperaSetup.exe" -ArgumentList "/silent /launchopera 0" -Uri "https://net.geo.opera.com/opera/stable/windows"
-            $balloon.BalloonTipText = "Opera installation complete"
-            $balloon.ShowBalloonTip(5000)
-
+            Remove-DesktopShortcut -ShortcutLabel "Opera Browser"
+ 
             # Install latest LastPass browser extensions
-            Install-WebRequest -Installer "LastPassSetup.exe" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Uri "https://lastpass.com/download/cdn/lastpass_x64.exe"
+            Install-WebRequest -Installer "LastPassSetup.exe" -ArgumentList "--silinstall --userinstallchrome --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Uri "https://lastpass.com/download/cdn/lastpass_x64.exe"
 
             # Install latest Skype Classic
             Install-WebRequest -Installer "SkypeSetup.exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
             Remove-DesktopShortcut -ShortcutLabel "Skype"
-            $balloon.BalloonTipText = "Skype Classic installation complete"
-            $balloon.ShowBalloonTip(5000)
-
+ 
             # Install latest Spotify
             Install-WebRequest -Installer "SpotifySetup.exe" -ArgumentList "/Silent" -Uri "https://download.scdn.co/SpotifySetup.exe"
             Remove-DesktopShortcut -ShortcutLabel "Spotify"
-            $balloon.BalloonTipText = "Spotify installation complete"
-            $balloon.ShowBalloonTip(5000)
-
+ 
             # Install latest Steam
             Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
             Remove-DesktopShortcut -ShortcutLabel "Steam"
-            $balloon.BalloonTipText = "Stream installation complete"
-            $balloon.ShowBalloonTip(5000)
-
+ 
             # Install latest Nomacs
             Install-WebRequest -Installer "NomacsSetup.msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
 
@@ -127,10 +103,7 @@ Workflow Install-Hephaestus
             #https://officecdn.microsoft.com/db/492350F6-3A01-4F97-B9C0-C7C6DDF67D60/media/en-US/O365HomePremRetail.img
 
             # Install Adobe Creative Cloud
-            # TODO: refactor
-            Invoke-WebRequest "http://ccmdl.adobe.com/AdobeProducts/KCCC/1/win32/ACCCx4_3_0_256.zip" -OutFile "$env:TEMP\CreativeCloudSetup.zip"
-            Expand-Archive "$env:TEMP\CreativeCloudSetup.zip" "$env:TEMP\CreativeCloudSetup"
-            Start-Process -FilePath "$env:TEMP\CreativeCloudSetup\Set-up.exe" -ArgumentList "--silent" -Wait
+            Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--shouldLaunchACC=false" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
 
             # TODO: File Optimizer
             # TODO: FileZilla Client
@@ -149,8 +122,8 @@ Workflow Install-Hephaestus
 
             # TODO: Java Development Kit
             # TODO: Add version-agnostic download link to latest release
-            Invoke-WebRequest "http://download.oracle.com/otn-pub/java/jdk/9.0.1+11/jdk-9.0.1_windows-x64_bin.exe" -OutFile "$env:TEMP\JDKSetup.exe"
-            Start-Process -FilePath "$env:TEMP\JDKSetup.exe" -ArgumentList "/s STATIC=1 ADDLOCAL=ToolsFeature" -Wait
+            #Invoke-WebRequest "http://download.oracle.com/otn-pub/java/jdk/9.0.1+11/jdk-9.0.1_windows-x64_bin.exe" -OutFile "$env:TEMP\JDKSetup.exe"
+            #Start-Process -FilePath "$env:TEMP\JDKSetup.exe" -ArgumentList "/s STATIC=1 ADDLOCAL=ToolsFeature" -Wait
 
             # TODO: Android Studio
             # TODO: Visual Studio Emulator for Android (https://aka.ms/vscomemudownload)
