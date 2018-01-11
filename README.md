@@ -8,10 +8,14 @@ development machine.
 ## Features
 
 *   Disable System Restore temporarily for improved performance and
-    create an initial system restore point when done
+    create an initial system restore point when complete
+*   Enable Hyper-V and Containers optional Windows features and install
+    Docker CE for Windows
 *   Enable Windows Subsystem for Linux (WSL)
-*   Enable Hyper-V and install Docker CE for Windows
-*   Install latest Google Chrome, Mozilla Firefox browsers and Opera with LastPass browser extension
+*   Install Google Chrome, Mozilla Firefox and Opera browsers with
+    LastPass browser extension
+*   Install Adobe Creative Cloud and JetBrains Toolbox desktop
+    applications
 
 ## Requirements
 
