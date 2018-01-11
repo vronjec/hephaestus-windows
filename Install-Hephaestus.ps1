@@ -111,7 +111,7 @@ Workflow Install-Hephaestus
             Install-WebRequest -Installer "GitSetup.exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"
 
             # Install latest Visual Studio Code
-            Install-WebRequest -Installer "VSCodeSetup.exe" -ArgumentList "/VERYSILENT /MERGETASKS=!runcode" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
+            Install-WebRequest -Installer "VSCodeSetup.exe" -ArgumentList "/verysilent /suppressmsgboxes /mergetasks=!runcode,!desktopicon,quicklaunchicon,addcontextmenufiles,addcontextmenufolders,addtopath" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
 
             # Install JetBrains Toolbox
             # TODO: Add version-agnostic download link to latest release
