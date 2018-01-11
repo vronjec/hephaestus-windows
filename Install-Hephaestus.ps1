@@ -1,5 +1,7 @@
 Import-Module PSWorkflow
 
+Add-Type -AssemblyName System.Windows.Forms
+
 function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
     $FilePath = "$env:TEMP\$Installer"
 
@@ -29,6 +31,18 @@ function Remove-DesktopShortcut ($ShortcutLabel) {
 
 Workflow Install-Hephaestus
 {
+    $Global:balloon = New-Object System.Windows.Forms.NotifyIcon
+    #Get-Member -InputObject  $Global:balloon
+
+    $path = (Get-Process -id $pid).Path
+    $balloon.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($path)
+    $balloon.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::Info
+    $balloon.BalloonTipTitle = "Hephaestus installation"
+    # [System.Windows.Forms.ToolTipIcon] | Get-Member -Static -Type Property
+    $balloon.BalloonTipText = 'What do you think of this balloon tip?'
+    $balloon.Visible = $true
+    $balloon.ShowBalloonTip(5000)
+
     # Disable System Restore
     Disable-ComputerRestore -Drive "C:\"
 
@@ -49,7 +63,7 @@ Workflow Install-Hephaestus
             # TODO: Configure WSL after reboot
             # WSL> adduser wicwega
             # WSL> adduser wicwega sudo
-            # WSL> apt-get install tree mc...
+            # WSL> apt-get install tree mc lftp...
             # CMD> ubuntu config --default-user wicwega
         } # Sequence
 
@@ -57,14 +71,20 @@ Workflow Install-Hephaestus
             # Install latest Chrome
             Install-WebRequest -Installer "ChromeSetup.msi" -ArgumentList "/quiet" -Uri "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi"
             Remove-DesktopShortcut -ShortcutLabel "Google Chrome"
+            $balloon.BalloonTipText = "Google Chrome installation complete"
+            $balloon.ShowBalloonTip(5000)
 
             # Install latest Firefox
             # TODO: Remove desktop icon
             Install-WebRequest -Installer "FirefoxSetup.exe" -ArgumentList "-ms" -Uri "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
+            $balloon.BalloonTipText = "Mozilla Firefox installation complete"
+            $balloon.ShowBalloonTip(5000)
 
             # Install latest Opera
             # TODO: Remove desktop icon
             Install-WebRequest -Installer "OperaSetup.exe" -ArgumentList "/silent /launchopera 0" -Uri "https://net.geo.opera.com/opera/stable/windows"
+            $balloon.BalloonTipText = "Opera installation complete"
+            $balloon.ShowBalloonTip(5000)
 
             # Install latest LastPass browser extensions
             Install-WebRequest -Installer "LastPassSetup.exe" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Uri "https://lastpass.com/download/cdn/lastpass_x64.exe"
@@ -72,14 +92,20 @@ Workflow Install-Hephaestus
             # Install latest Skype Classic
             Install-WebRequest -Installer "SkypeSetup.exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
             Remove-DesktopShortcut -ShortcutLabel "Skype"
+            $balloon.BalloonTipText = "Skype Classic installation complete"
+            $balloon.ShowBalloonTip(5000)
 
             # Install latest Spotify
             Install-WebRequest -Installer "SpotifySetup.exe" -ArgumentList "/Silent" -Uri "https://download.scdn.co/SpotifySetup.exe"
             Remove-DesktopShortcut -ShortcutLabel "Spotify"
+            $balloon.BalloonTipText = "Spotify installation complete"
+            $balloon.ShowBalloonTip(5000)
 
             # Install latest Steam
             Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
             Remove-DesktopShortcut -ShortcutLabel "Steam"
+            $balloon.BalloonTipText = "Stream installation complete"
+            $balloon.ShowBalloonTip(5000)
 
             # Install latest Nomacs
             Install-WebRequest -Installer "NomacsSetup.msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
@@ -112,13 +138,17 @@ Workflow Install-Hephaestus
             Install-WebRequest -Installer "GitSetup.exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"
 
             # Install latest Visual Studio Code
-            Install-WebRequest -Installer "VSCodeSetup.exe" -ArgumentList "/verysilent /suppressmsgboxes /mergetasks=!runcode,!desktopicon,quicklaunchicon,addcontextmenufiles,addcontextmenufolders,addtopath" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
+            Install-WebRequest -Installer "VSCodeSetup.exe" -ArgumentList "/verysilent /suppressmsgboxes /mergetasks=!runcode,!desktopicon,quicklaunchicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
 
             # Install JetBrains Toolbox
             # TODO: Add version-agnostic download link to latest release
             Install-WebRequest -Installer "JetBrainsSetup.exe" -ArgumentList "/S /NoDesktopIcon" -Uri "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe"
 
             # TODO: Java Development Kit
+            # TODO: Add version-agnostic download link to latest release
+            Invoke-WebRequest "http://download.oracle.com/otn-pub/java/jdk/9.0.1+11/jdk-9.0.1_windows-x64_bin.exe" -OutFile "$env:TEMP\JDKSetup.exe"
+            Start-Process -FilePath "$env:TEMP\JDKSetup.exe" -ArgumentList "/s STATIC=1 ADDLOCAL=ToolsFeature" -Wait
+
             # TODO: Android Studio
             # TODO: Visual Studio Emulator for Android (https://aka.ms/vscomemudownload)
 
