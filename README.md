@@ -14,7 +14,7 @@ development machine.
 *   Enable Windows Subsystem for Linux (WSL)
 *   Install Google Chrome, Mozilla Firefox and Opera browsers with
     LastPass browser extension
-*   Install Adobe Creative Cloud and JetBrains Toolbox desktop
+*   Install Adobe Creative Cloud, JetBrains Toolbox and Steam desktop
     applications
 
 ## Requirements
