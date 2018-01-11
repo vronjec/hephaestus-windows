@@ -3,6 +3,9 @@ Import-Module PSWorkflow
 function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
     $FilePath = "$env:TEMP\$Installer"
 
+    # Enable TLS 1.2
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
     Invoke-WebRequest "$Uri" -OutFile "$FilePath"
 
     Switch ([IO.Path]::GetExtension("$FilePath")) {
@@ -66,19 +69,17 @@ Workflow Install-Hephaestus
             # Install latest LastPass browser extensions
             Install-WebRequest -Installer "LastPassSetup.exe" -ArgumentList "--silinstall --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Uri "https://lastpass.com/download/cdn/lastpass_x64.exe"
 
-            # Install latest Slack
-            Install-WebRequest -Installer "SlackSetup.exe" -ArgumentList "-s" -Uri "https://slack.com/ssb/download-win64"
-            Remove-DesktopShortcut -ShortcutLabel "Slack"
-
             # Install latest Skype Classic
             Install-WebRequest -Installer "SkypeSetup.exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
             Remove-DesktopShortcut -ShortcutLabel "Skype"
 
+            # Install latest Spotify
+            Install-WebRequest -Installer "SpotifySetup.exe" -ArgumentList "/Silent" -Uri "https://download.scdn.co/SpotifySetup.exe"
+            Remove-DesktopShortcut -ShortcutLabel "Spotify"
+
             # Install latest Steam
             Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
             Remove-DesktopShortcut -ShortcutLabel "Steam"
-
-            # TODO: Spotify
 
             # Install latest Nomacs
             Install-WebRequest -Installer "NomacsSetup.msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
@@ -88,16 +89,18 @@ Workflow Install-Hephaestus
             Install-WebRequest -Installer "MPCHCSetup.exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
             Remove-DesktopShortcut -ShortcutLabel "MPC-HC x64"
 
-            # TODO: PeaZip
-            # TODO: Microsoft Office
-
-            # Install Adobe Creative Cloud desktop application
+            # Install PeaZip
             # TODO: Add version-agnostic download link to latest release
-            # Invoke-WebRequest "http://ccmdl.adobe.com/AdobeProducts/KCCC/1/win32/ACCCx4_3_0_256.zip" -OutFile "$env:TEMP\CreativeCloud.zip"
-            # TODO: Implement function to unzip archive to given path
-            # Extract-Archive -Archive "$env:TEMP\CreativeCloud.zip" -OutDirectory "$env:TEMP"
-            # TODO: Implement function to initiate installer at given path
-            # Invoke-Installer -Installer "$env:TEMP\ACCCx4_3_0_256\Set-up.exe" -ArgumentList "--silent"
+            Install-WebRequest -Installer "PeaZipSetup.exe" -ArgumentList "/VERYSILENT" -Uri "http://www.peazip.org/downloads/peazip-6.5.0.WIN64.exe"
+
+            # TODO: Microsoft Office 365 Personal
+            #https://officecdn.microsoft.com/db/492350F6-3A01-4F97-B9C0-C7C6DDF67D60/media/en-US/O365HomePremRetail.img
+
+            # Install Adobe Creative Cloud
+            # TODO: refactor
+            Invoke-WebRequest "http://ccmdl.adobe.com/AdobeProducts/KCCC/1/win32/ACCCx4_3_0_256.zip" -OutFile "$env:TEMP\CreativeCloudSetup.zip"
+            Expand-Archive "$env:TEMP\CreativeCloudSetup.zip" "$env:TEMP\CreativeCloudSetup"
+            Start-Process -FilePath "$env:TEMP\CreativeCloudSetup\Set-up.exe" -ArgumentList "--silent" -Wait
 
             # TODO: File Optimizer
             # TODO: FileZilla Client
@@ -107,8 +110,7 @@ Workflow Install-Hephaestus
             # TODO: Add version-agnostic download link to latest release
             Install-WebRequest -Installer "GitSetup.exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"
 
-            # Install Visual Studio Code
-            # TODO: Add version-agnostic download link to latest release
+            # Install latest Visual Studio Code
             Install-WebRequest -Installer "VSCodeSetup.exe" -ArgumentList "/VERYSILENT /MERGETASKS=!runcode" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
 
             # Install JetBrains Toolbox
@@ -122,28 +124,29 @@ Workflow Install-Hephaestus
             # Install latest Docker CE for Windows
             Install-WebRequest -Installer "DockerSetup.exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
 
-            # TODO: Devilbox
+            # TODO: C++ Redistributable Visual Studio 2017
+            # https://aka.ms/vs/15/release/VC_redist.x64.exe
+            # https://aka.ms/vs/15/release/VC_redist.x86.exe
 
-            # TODO: PHP 5.6
-            # TODO: PHP 7.0
-            # TODO: PHP 7.1
-            # TODO: PHP 7.2
+            # TODO: Apache 2.4 (32bit)
+            # TODO: Apache 2.4 (64bit)
 
-            # TODO: Install Microsoft ODBC Driver 11
+            # TODO: PHP 5.6 (32bit)
+            # TODO: PHP 5.6 (64bit)
+            # TODO: Microsoft ODBC Driver for SQL Server 11
             # Install MsSQL-ODBC-11.msi
             # TODO: Microsoft PHP Driver for SQL Server 3.2
             # Install PHP extension MsSQL-PHP-3.2.exe to PHP 5.6 ext/ directory
             # Enable PHP extension in PHP 5.6
 
-            # TODO: Install Microsoft ODBC Driver 13
-            # Install MsSQL-ODBC-13.msi
+            # TODO: PHP 7.0 (32bit)
+            # TODO: PHP 7.0 (64bit)
+            # TODO: Microsoft ODBC Driver for SQL Server 13.1
+            # Install MsSQL-ODBC-13.1.msi
             # TODO: Microsoft PHP Driver for SQL Server 4.0
             # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.0 ext/ directory
             # Enable PHP extension in PHP 7.0
-            # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.1 ext/ directory
-            # Enable PHP extension in PHP 7.1
-            # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.2 ext/ directory
-            # Enable PHP extension in PHP 7.2
+
         } # Sequence
 
     } # Parallel
