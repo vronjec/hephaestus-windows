@@ -55,7 +55,10 @@ Workflow Install-Hephaestus
             }
 
             # Enable Hyper-V
-            Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All -NoRestart 
+            Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All -NoRestart
+
+            # Enabling Containers
+            Enable-WindowsOptionalFeature -FeatureName Containers -Online -All -NoRestart
 
             # Enable Windows Subsystem for Linux
             Enable-WindowsOptionalFeature -FeatureName Microsoft-Windows-Subsystem-Linux -Online -All -NoRestart

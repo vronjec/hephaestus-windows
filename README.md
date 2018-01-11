@@ -9,9 +9,9 @@ development machine.
 
 *   Disable System Restore temporarily for improved performance and
     create an initial system restore point when done
-*   Install Chrome, Firefox and Opera with LastPass browser extension
 *   Enable Windows Subsystem for Linux (WSL)
 *   Enable Hyper-V and install Docker CE for Windows
+*   Install latest Google Chrome, Mozilla Firefox browsers and Opera with LastPass browser extension
 
 ## Requirements
 
