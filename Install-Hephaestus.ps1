@@ -63,7 +63,7 @@ Workflow Install-Hephaestus
             # TODO: Configure WSL after reboot
             # WSL> adduser wicwega
             # WSL> adduser wicwega sudo
-            # WSL> apt-get install tree mc lftp...
+            # WSL> apt-get install screenfetch tree lftp mc...
             # CMD> ubuntu config --default-user wicwega
         } # Sequence
 
