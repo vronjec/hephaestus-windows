@@ -103,7 +103,8 @@ Workflow Install-Hephaestus
             #https://officecdn.microsoft.com/db/492350F6-3A01-4F97-B9C0-C7C6DDF67D60/media/en-US/O365HomePremRetail.img
 
             # Install Adobe Creative Cloud
-            Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--shouldLaunchACC=false" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
+            #Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--shouldLaunchACC=false" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
+            Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--mode=silent --action=install" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
 
             # TODO: File Optimizer
             # TODO: FileZilla Client
