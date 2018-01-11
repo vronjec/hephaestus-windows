@@ -92,6 +92,7 @@ Workflow Install-Hephaestus
             # Install PeaZip
             # TODO: Add version-agnostic download link to latest release
             Install-WebRequest -Installer "PeaZipSetup.exe" -ArgumentList "/VERYSILENT" -Uri "http://www.peazip.org/downloads/peazip-6.5.0.WIN64.exe"
+            Remove-DesktopShortcut -ShortcutLabel "PeaZip"
 
             # TODO: Microsoft Office 365 Personal
             #https://officecdn.microsoft.com/db/492350F6-3A01-4F97-B9C0-C7C6DDF67D60/media/en-US/O365HomePremRetail.img
