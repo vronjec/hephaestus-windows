@@ -121,7 +121,7 @@ Workflow Install-Hephaestus
             Remove-DesktopShortcut -ShortcutLabel "Skype"
  
             # Install latest Spotify
-            Install-WebRequest -Installer "SpotifySetup.exe" -ArgumentList "/Silent" -Uri "https://download.scdn.co/SpotifySetup.exe"
+            Install-WebRequest -Installer "SpotifySetup.exe" -ArgumentList "/Silent" -Uri "http://download.spotify.com/SpotifyFullSetup.exe"
             Remove-DesktopShortcut -ShortcutLabel "Spotify"
  
             # Install latest Steam
@@ -142,10 +142,14 @@ Workflow Install-Hephaestus
             Remove-DesktopShortcut -ShortcutLabel "PeaZip"
 
             # TODO: Microsoft Office 365 Personal
-            #https://officecdn.microsoft.com/db/492350F6-3A01-4F97-B9C0-C7C6DDF67D60/media/en-US/O365HomePremRetail.img
+            #Invoke-WebRequest "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-US/O365HomePremRetail.img" -OutFile "$env:TEMP\OfficeSetup.img"
+            #$Image = Mount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img" -NoDriveLetter -PassThru
+            #$Drive = Get-WmiObject win32_volume -Filter "Label = '$((Get-Volume -DiskImage $Image).FileSystemLabel)'" -ErrorAction Stop
+            #$Drive.AddMountPoint("$env:TEMP\OfficeSetup")
+            #TODO install
+            #Dismount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img"
 
             # Install Adobe Creative Cloud
-            #Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--shouldLaunchACC=false" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
             Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--mode=silent --action=install" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
 
             # TODO: File Optimizer
