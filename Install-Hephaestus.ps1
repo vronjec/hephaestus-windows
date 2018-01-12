@@ -27,6 +27,15 @@ function Remove-DesktopShortcut ($ShortcutLabel) {
     Remove-Item "$FilePath"
 }
 
+function Set-RegistryKeyValue ($RegistryPath, $Key, $Value) {
+    if (!(Test-Path $RegistryPath)) {
+        New-Item -Path $RegistryPath -Force | Out-Null
+        New-ItemProperty -Path $RegistryPath -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
+    } else {
+        New-ItemProperty -Path $RegistryPath -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
+    }
+}
+
 Workflow Install-Hephaestus
 {
     # Disable System Restore
@@ -39,12 +48,6 @@ Workflow Install-Hephaestus
             Switch -CaseSensitive ((Get-WmiObject -Class Win32_BIOS).SerialNumber) {
                 "MP0ARBG" { Rename-Computer -NewName "hephaestus" -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue }
             }
-
-            # Show taskbar on main display only
-            REG ADD HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /V MMTaskbarEnabled /T REG_dWORD /D 0 /F
-
-            # Show small taskbar buttons
-            REG ADD "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /V TaskbarSmallIcons /T REG_DWORD /D 1 /F
 
             # Enable Hyper-V
             Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All -NoRestart
@@ -60,6 +63,39 @@ Workflow Install-Hephaestus
             # WSL> adduser wicwega sudo
             # WSL> apt-get install screenfetch tree lftp mc...
             # CMD> ubuntu config --default-user wicwega
+
+            # Show taskbar on main display only
+            Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key MMTaskbarEnabled -Value 0
+
+            # Show small taskbar buttons
+            Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key TaskbarSmallIcons -Value 1
+
+            # Remove Search icon from taskbar
+            Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\Search -Key SearchboxTaskbarMode -Value 0
+
+            # Remove Get Office app
+            Get-AppxPackage *officehub* | Remove-AppxPackage
+
+            # Remove OneNote app
+            Get-AppxPackage *onenote* | Remove-AppxPackage
+
+            # Remove Skype app
+            Get-AppxPackage *skypeapp* | Remove-AppxPackage
+
+            # Remove Movies and TV app
+            Get-AppxPackage *zunevideo* | Remove-AppxPackage
+
+            # Remove Photos app
+            Get-AppxPackage *photos* | Remove-AppxPackage
+
+            # Remove News app
+            Get-AppxPackage *bingnews* | Remove-AppxPackage
+
+            # Remove Weather app
+            Get-AppxPackage *bingweather* | Remove-AppxPackage
+
+            # Remove Xbox app
+            Get-AppxPackage *xboxapp* | Remove-AppxPackage
         } # Sequence
 
         Sequence {
