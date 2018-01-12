@@ -64,6 +64,20 @@ Workflow Install-Hephaestus
             # WSL> apt-get install screenfetch tree lftp mc...
             # CMD> ubuntu config --default-user wicwega
 
+            # Install dotfiles
+            Invoke-WebRequest "https://github.com/vronjec/dotfiles/archive/master.zip" -OutFile "$env:TEMP\dotfiles-master.zip"
+            Expand-Archive -LiteralPath "$env:TEMP\dotfiles-master.zip" -DestinationPath "$env:TEMP\dotfiles-master"
+            Move-Item -Path "$env:TEMP\dotfiles-master\dotfiles-master\.config" -Destination "$env:USERPROFILE"
+            Remove-Item -Recurse "$env:TEMP\dotfiles-master"
+            Remove-Item "$env:TEMP\dotfiles-master.zip"
+
+            # Install keyfiles
+            #Invoke-WebRequest "https://github.com/vronjec/keyfiles/archive/master.zip" -OutFile "$env:TEMP\keyfiles-master.zip"
+            #Expand-Archive -LiteralPath "$env:TEMP\keyfiles-master.zip" -DestinationPath "$env:TEMP\keyfiles-master"
+            #Move-Item -Path "$env:TEMP\keyfiles-master\keyfiles-master\.ssh" -Destination "$env:USERPROFILE"
+            #Remove-Item -Recurse "$env:TEMP\keyfiles-master"
+            #Remove-Item "$env:TEMP\keyfiles-master.zip"
+
             # Show taskbar on main display only
             Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key MMTaskbarEnabled -Value 0
 
