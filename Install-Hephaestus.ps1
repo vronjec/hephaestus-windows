@@ -1,3 +1,7 @@
+# Usage:
+# > Set-ExecutionPolicy RemoteSigned
+# > .\Setup-Hephaestus.ps1
+
 Import-Module PSWorkflow
 
 function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
@@ -28,7 +32,7 @@ function Remove-DesktopShortcut ($ShortcutLabel) {
 }
 
 function Set-RegistryKeyValue ($RegistryPath, $Key, $Value) {
-    if (!(Test-Path $RegistryPath)) {
+    if (-Not (Test-Path -Path $RegistryPath)) {
         New-Item -Path $RegistryPath -Force | Out-Null
         New-ItemProperty -Path $RegistryPath -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
     } else {
@@ -40,6 +44,20 @@ Workflow Install-Hephaestus
 {
     # Disable System Restore
     Disable-ComputerRestore -Drive "C:\"
+
+    # Set power saving options
+    powercfg -change monitor-timeout-ac 15
+    powercfg -change monitor-timeout-dc 15
+    powercfg -change disk-timeout-ac 0
+    powercfg -change disk-timeout-dc 0
+    powercfg -change standby-timeout-ac 0
+    powercfg -change standby-timeout-dc 0
+    powercfg -change hibernate-timeout-ac 0
+    powercfg -change hibernate-timeout-dc 0
+
+    # Set lid close action to do nothing
+    powercfg -setacvalueindex 381b4222-f694-41f0-9685-ff5bb260df2e 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
+    powercfg -setdcvalueindex 381b4222-f694-41f0-9685-ff5bb260df2e 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
 
     Parallel {
 
@@ -87,6 +105,11 @@ Workflow Install-Hephaestus
             # Remove Search icon from taskbar
             Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\Search -Key SearchboxTaskbarMode -Value 0
 
+            # Remove games
+            Get-AppxPackage *disneymagic* | Remove-AppxPackage
+            Get-AppxPackage *empires* | Remove-AppxPackage
+            Get-AppxPackage *king.com.* | Remove-AppxPackage
+
             # Remove Get Office app
             Get-AppxPackage *officehub* | Remove-AppxPackage
 
@@ -95,6 +118,9 @@ Workflow Install-Hephaestus
 
             # Remove Skype app
             Get-AppxPackage *skypeapp* | Remove-AppxPackage
+
+            # Remove Messaging app
+            Get-AppxPackage *messaging* | Remove-AppxPackage
 
             # Remove Movies and TV app
             Get-AppxPackage *zunevideo* | Remove-AppxPackage
@@ -107,6 +133,9 @@ Workflow Install-Hephaestus
 
             # Remove Weather app
             Get-AppxPackage *bingweather* | Remove-AppxPackage
+
+            # Remove Winzip app
+            Get-AppxPackage *winzip*| Remove-AppxPackage
 
             # Remove Xbox app
             Get-AppxPackage *xboxapp* | Remove-AppxPackage
@@ -223,7 +252,10 @@ Workflow Install-Hephaestus
     Enable-ComputerRestore -Drive "C:\"
 
     # Create system restore point
-    Checkpoint-Computer -Description "Initial system"
+    Checkpoint-Computer -Description "Initial setup with installation script" -RestorePointType APPLICATION_INSTALL
+
+    # Restart computer
+    Restart-Computer -Wait
 }
 
 # Execute workflow as job
