@@ -164,10 +164,8 @@ Workflow Install-Hephaestus
             Remove-DesktopShortcut -ShortcutLabel "Mozilla Firefox"
  
             # Install latest Opera
-            # TODO: Remove desktop icon
-            Install-WebRequest -Installer "OperaSetup.exe" -ArgumentList "/silent /launchopera 0" -Uri "https://net.geo.opera.com/opera/stable/windows"
-            Remove-DesktopShortcut -ShortcutLabel "Opera Browser"
- 
+            Install-WebRequest -Installer "OperaSetup.exe" -ArgumentList "/silent /allusers=yes /launchopera=no /desktopshortcut=no /setdefaultbrowser=no /pintotaskbar=no /startmenushortcut=yes" -Uri "https://net.geo.opera.com/opera/stable/windows"
+
             # Install latest LastPass browser extensions
             Install-WebRequest -Installer "LastPassSetup.exe" -ArgumentList "--silinstall --userinstallchrome --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Uri "https://lastpass.com/download/cdn/lastpass_x64.exe"
 
