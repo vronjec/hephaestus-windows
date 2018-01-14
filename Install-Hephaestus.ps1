@@ -142,6 +142,18 @@ Workflow Install-Hephaestus
         } # Sequence
 
         Sequence {
+            # Install Microsoft Office 365 Personal
+            Invoke-WebRequest "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-US/O365HomePremRetail.img" -OutFile "$env:TEMP\OfficeSetup.img"
+            New-Item -ItemType Directory -Force "$env:TEMP\OfficeSetup"
+            $Image = Mount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img" -NoDriveLetter -PassThru
+            $Drive = Get-WmiObject win32_volume -Filter "Label = '$((Get-Volume -DiskImage $Image).FileSystemLabel)'" -ErrorAction Stop
+            $Drive.AddMountPoint("$env:TEMP\OfficeSetup")
+            Start-Process -FilePath "$env:TEMP\OfficeSetup\Office\Setup64.exe" -Wait
+            Dismount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img"
+            Remove-Item -Force "$env:TEMP\OfficeSetup"
+        } # Sequence
+
+        Sequence {
             # Install latest Chrome
             Install-WebRequest -Installer "ChromeSetup.msi" -ArgumentList "/quiet" -Uri "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi"
             Remove-DesktopShortcut -ShortcutLabel "Google Chrome"
@@ -183,14 +195,6 @@ Workflow Install-Hephaestus
             # TODO: Add version-agnostic download link to latest release
             Install-WebRequest -Installer "PeaZipSetup.exe" -ArgumentList "/VERYSILENT" -Uri "http://www.peazip.org/downloads/peazip-6.5.0.WIN64.exe"
             Remove-DesktopShortcut -ShortcutLabel "PeaZip"
-
-            # TODO: Microsoft Office 365 Personal
-            #Invoke-WebRequest "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-US/O365HomePremRetail.img" -OutFile "$env:TEMP\OfficeSetup.img"
-            #$Image = Mount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img" -NoDriveLetter -PassThru
-            #$Drive = Get-WmiObject win32_volume -Filter "Label = '$((Get-Volume -DiskImage $Image).FileSystemLabel)'" -ErrorAction Stop
-            #$Drive.AddMountPoint("$env:TEMP\OfficeSetup")
-            #TODO install
-            #Dismount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img"
 
             # Install Adobe Creative Cloud
             Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--mode=silent --action=install" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
