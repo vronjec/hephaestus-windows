@@ -113,10 +113,14 @@ Workflow Install-Hephaestus
             # Remove Search icon from taskbar
             Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\Search -Key SearchboxTaskbarMode -Value 0
 
-            # Remove games
-            Get-AppxPackage *disneymagic* | Remove-AppxPackage
-            Get-AppxPackage *empires* | Remove-AppxPackage
-            Get-AppxPackage *king.com.* | Remove-AppxPackage
+            # Remove People icon from taskbar
+            Set-RegistryKeyValue -RegistryPath HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People -Key PeopleBand -Value 0
+
+            # Prevent bloatware apps from returning
+            Set-RegistryKeyValue -RegistryPath HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent -Key DisableWindowsConsumerFeatures -Value 1
+
+            # Prevent suggestions in Start Menu
+            Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Key SystemPaneSuggestionsEnabled -Value 0
 
             # Remove Get Office app
             Get-AppxPackage *officehub* | Remove-AppxPackage
@@ -147,6 +151,11 @@ Workflow Install-Hephaestus
 
             # Remove Xbox app
             Get-AppxPackage *xboxapp* | Remove-AppxPackage
+
+            # Remove games
+            Get-AppxPackage *disneymagic* | Remove-AppxPackage
+            Get-AppxPackage *empires* | Remove-AppxPackage
+            Get-AppxPackage *king.com.* | Remove-AppxPackage
         } # Sequence
 
         Sequence {
