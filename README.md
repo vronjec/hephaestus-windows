@@ -7,27 +7,28 @@ development machine.
 
 ## Features
 
-*   Installs the following applications and tools:
+*   Installs browsers, browser extensions and chat clients:
     *   Google Chrome with LastPass
     *   Mozilla Firefox with LastPass
     *   Opera with LastPass
     *   Skype Classic
+*   Installs multimedia and office applications:
+    *   PeaZip
     *   Nomacs
     *   MPC-HC
-    *   PeaZip
     *   Microsoft Office 365 Personal
     *   Adobe Creative Cloud
+    *   Steam
+*   Installs developer applications and tools:
     *   Git
     *   Visual Studio Code
     *   JetBrains Toolbox
     *   Docker CE for Windows
-    *   Steam
-*   Enables the following optional Windows features:
+*   Enables optional Windows features:
     *   Windows Subsystem for Linux (WSL)
     *   Hyper-V 
     *   Containers
-*   Disables System Restore temporarily for improved performance and
-    creates an initial system restore point when complete
+*   Creates an initial system restore point when complete.
     
 ## Requirements
 
