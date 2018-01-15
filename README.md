@@ -7,7 +7,7 @@ development machine.
 
 ## Features
 
-*   Installs browsers, browser extensions and messaging applications:
+*   Installs browsers and messaging applications:
     *   Google Chrome with LastPass browser extension
     *   Mozilla Firefox with LastPass browser extension
     *   Opera with LastPass browser extension

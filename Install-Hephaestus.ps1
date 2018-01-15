@@ -183,8 +183,14 @@ Workflow Install-Hephaestus
             Remove-DesktopShortcut -ShortcutLabel "Skype"
 
             # Install latest Spotify
-            # TODO: Resolve elevatation issue
-            Install-WebRequest -Installer "SpotifySetup.exe" -ArgumentList "/Silent" -Uri "http://download.spotify.com/SpotifyFullSetup.exe"
+            Invoke-WebRequest "http://download.spotify.com/SpotifyFullSetup.exe" -OutFile "$env:TEMP\SpotifySetup.exe"
+            $TaskName = "Install Spotify"
+            $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "$env:Temp\SpotifySetup.exe /Silent"
+            $Trigger = New-ScheduledTaskTrigger -Once -At (Get-Date)
+            Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName $TaskName | Out-Null
+            Start-ScheduledTask -TaskName $TaskName
+            Start-Sleep -s 1
+            Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
 
             # Install latest Nomacs
             Install-WebRequest -Installer "NomacsSetup.msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
