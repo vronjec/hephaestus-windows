@@ -7,28 +7,30 @@ development machine.
 
 ## Features
 
-*   Installs browsers, browser extensions and chat clients:
-    *   Google Chrome with LastPass
-    *   Mozilla Firefox with LastPass
-    *   Opera with LastPass
+*   Installs browsers, browser extensions and messaging applications:
+    *   Google Chrome with LastPass browser extension
+    *   Mozilla Firefox with LastPass browser extension
+    *   Opera with LastPass browser extension
     *   Skype Classic
-*   Installs multimedia and office applications:
-    *   PeaZip
-    *   Nomacs
-    *   MPC-HC
+*   Installs office applications and utilities:
     *   Microsoft Office 365 Personal
-    *   Adobe Creative Cloud
-    *   Steam
-*   Installs developer applications and tools:
-    *   Git
-    *   Visual Studio Code
-    *   JetBrains Toolbox
+    *   PeaZip archiver utility
+*   Installs graphic design applications and tools:
+    *   Adobe Creative Cloud app (for manual installation of Adobe apps)
+*   Installs software development applications and tools:
+    *   Git version control software
+    *   Visual Studio Code source code editor
+    *   JetBrains Toolbox (for manual installation of JetBrains apps)
     *   Docker CE for Windows
-*   Enables optional Windows features:
+*   Installs games and entertainment applications:
+    *   Nomacs image viewer
+    *   MPC-HC media player
+    *   Steam app (for manual installation of Steam games)
+*   Enables optional Windows features for development:
     *   Windows Subsystem for Linux (WSL)
     *   Hyper-V 
     *   Containers
-*   Creates an initial system restore point when complete.
+*   Creates an initial system restore point when installation completes
     
 ## Requirements
 
@@ -38,8 +40,8 @@ development machine.
 
 ## Recommendations
 
-*   Perform a clean installation of Windows 10 Fall Creators Update or
-    newer before running the script
+*   Perform a clean installation of Windows 10 Pro Insider Preview 17025
+    or newer and link Microsoft account during installation
 
 ## Installation
 
