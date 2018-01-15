@@ -7,16 +7,28 @@ development machine.
 
 ## Features
 
-*   Disable System Restore temporarily for improved performance and
-    create an initial system restore point when complete
-*   Enable Hyper-V and Containers optional Windows features and install
-    Docker CE for Windows
-*   Enable Windows Subsystem for Linux (WSL)
-*   Install Google Chrome, Mozilla Firefox and Opera browsers with
-    LastPass browser extension
-*   Install Adobe Creative Cloud, JetBrains Toolbox and Steam desktop
-    applications
-
+*   Installs the following applications and tools:
+    *   Google Chrome with LastPass
+    *   Mozilla Firefox with LastPass
+    *   Opera with LastPass
+    *   Skype Classic
+    *   Nomacs
+    *   MPC-HC
+    *   PeaZip
+    *   Microsoft Office 365 Personal
+    *   Adobe Creative Cloud
+    *   Git
+    *   Visual Studio Code
+    *   JetBrains Toolbox
+    *   Docker CE for Windows
+    *   Steam
+*   Enables the following optional Windows features:
+    *   Windows Subsystem for Linux (WSL)
+    *   Hyper-V 
+    *   Containers
+*   Disables System Restore temporarily for improved performance and
+    creates an initial system restore point when complete
+    
 ## Requirements
 
 *   Windows 10 Professional
