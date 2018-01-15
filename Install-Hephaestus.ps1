@@ -1,4 +1,5 @@
 # Usage:
+# > . { Invoke-WebRequest -useb https://raw.githubusercontent.com/vronjec/hephaestus-windows/master/Install-Hephaestus.ps1 } | Invoke-Expression
 # > Set-ExecutionPolicy RemoteSigned
 # > .\Setup-Hephaestus.ps1
 
@@ -196,7 +197,7 @@ Workflow Install-Hephaestus
             $TaskName = "Install Spotify"
             $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "$env:Temp\SpotifySetup.exe /Silent"
             $Trigger = New-ScheduledTaskTrigger -Once -At (Get-Date)
-            Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName $TaskName | Out-Null
+            Register-ScheduledTask -Action $Action -Trigger $Trigger -TaskName $TaskName
             Start-ScheduledTask -TaskName $TaskName
             Start-Sleep -s 1
             Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
