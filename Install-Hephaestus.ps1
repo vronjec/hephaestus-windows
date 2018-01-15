@@ -26,7 +26,7 @@ function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
 }
 
 function Remove-DesktopShortcut ($ShortcutLabel) {
-    $FilePath = "${env:USERPROFILE}\Desktop\${ShortcutLabel}.lnk"
+    $FilePath = "${env:USERPROFILE}\OneDrive\Desktop\${ShortcutLabel}.lnk"
 
     Remove-Item "$FilePath"
 }
@@ -167,12 +167,11 @@ Workflow Install-Hephaestus
             # Install latest Chrome
             Install-WebRequest -Installer "ChromeSetup.msi" -ArgumentList "/quiet" -Uri "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi"
             Remove-DesktopShortcut -ShortcutLabel "Google Chrome"
- 
+
             # Install latest Firefox
-            # TODO: Remove desktop icon
             Install-WebRequest -Installer "FirefoxSetup.exe" -ArgumentList "-ms" -Uri "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
             Remove-DesktopShortcut -ShortcutLabel "Mozilla Firefox"
- 
+
             # Install latest Opera
             Install-WebRequest -Installer "OperaSetup.exe" -ArgumentList "/silent /allusers=yes /launchopera=no /desktopshortcut=no /setdefaultbrowser=no /pintotaskbar=no /startmenushortcut=yes" -Uri "https://net.geo.opera.com/opera/stable/windows"
 
@@ -182,15 +181,11 @@ Workflow Install-Hephaestus
             # Install latest Skype Classic
             Install-WebRequest -Installer "SkypeSetup.exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
             Remove-DesktopShortcut -ShortcutLabel "Skype"
- 
+
             # Install latest Spotify
+            # TODO: Resolve elevatation issue
             Install-WebRequest -Installer "SpotifySetup.exe" -ArgumentList "/Silent" -Uri "http://download.spotify.com/SpotifyFullSetup.exe"
-            Remove-DesktopShortcut -ShortcutLabel "Spotify"
- 
-            # Install latest Steam
-            Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
-            Remove-DesktopShortcut -ShortcutLabel "Steam"
- 
+
             # Install latest Nomacs
             Install-WebRequest -Installer "NomacsSetup.msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
 
@@ -206,6 +201,7 @@ Workflow Install-Hephaestus
 
             # Install Adobe Creative Cloud
             Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--mode=silent --action=install" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
+            Remove-DesktopShortcut -ShortcutLabel "Adobe Creative Cloud"
 
             # TODO: File Optimizer
             # TODO: FileZilla Client
@@ -232,6 +228,11 @@ Workflow Install-Hephaestus
 
             # Install latest Docker CE for Windows
             Install-WebRequest -Installer "DockerSetup.exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
+            Remove-DesktopShortcut -ShortcutLabel "Docker for Windows"
+
+            # Install latest Steam
+            Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
+            Remove-DesktopShortcut -ShortcutLabel "Steam"
 
             # TODO: C++ Redistributable Visual Studio 2017
             # https://aka.ms/vs/15/release/VC_redist.x64.exe
