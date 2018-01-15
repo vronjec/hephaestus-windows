@@ -52,20 +52,28 @@ Workflow Install-Hephaestus
     powercfg -change disk-timeout-dc 0
     powercfg -change standby-timeout-ac 0
     powercfg -change standby-timeout-dc 0
-    powercfg -change hibernate-timeout-ac 0
-    powercfg -change hibernate-timeout-dc 0
 
     # Set lid close action to do nothing
     powercfg -setacvalueindex 381b4222-f694-41f0-9685-ff5bb260df2e 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
     powercfg -setdcvalueindex 381b4222-f694-41f0-9685-ff5bb260df2e 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
 
+    # Resolve hardware-related issues
+    Switch -CaseSensitive ((Get-WmiObject -Class Win32_BIOS).SerialNumber) {
+        "MP0ARBG" {
+            # Disable fast startup feature to fix startup issues
+            powercfg /hibernate off
+
+            # Set service startup type to fix Bluetooth issues
+            #Set-Service –Name "bthhfsrv" –StartupType "Automatic"
+            #Set-Service –Name "bthserv" –StartupType "Automatic"
+        }
+    }
+
     Parallel {
 
         Sequence {
             # Set computer name
-            Switch -CaseSensitive ((Get-WmiObject -Class Win32_BIOS).SerialNumber) {
-                "MP0ARBG" { Rename-Computer -NewName "hephaestus" -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue }
-            }
+            Rename-Computer -NewName "hephaestus" -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
 
             # Enable Hyper-V
             Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All -NoRestart
