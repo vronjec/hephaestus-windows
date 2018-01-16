@@ -18,6 +18,7 @@ development machine.
 *   Installs graphic design applications and tools:
     *   Adobe Creative Cloud app (for manual installation of Adobe apps)
 *   Installs software development applications and tools:
+    *   Cyberduck FTP and cloud storage client
     *   Git version control software
     *   Visual Studio Code source code editor
     *   JetBrains Toolbox (for manual installation of JetBrains apps)

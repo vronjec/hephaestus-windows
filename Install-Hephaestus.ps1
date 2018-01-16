@@ -220,7 +220,10 @@ Workflow Install-Hephaestus
             Remove-DesktopShortcut -ShortcutLabel "Adobe Creative Cloud"
 
             # TODO: File Optimizer
-            # TODO: FileZilla Client
+
+            # Install Cyberduck
+            # TODO: Add version-agnostic download link to latest release
+            Install-WebRequest -Installer "CyberduckSetup.exe" -ArgumentList "/quiet" -Uri "https://update.cyberduck.io/windows/Cyberduck-Installer-6.3.5.27408.exe"
 
             # Install Git
             # TODO: Refine installation: https://github.com/msysgit/msysgit/wiki/Silent-or-Unattended-Installation
