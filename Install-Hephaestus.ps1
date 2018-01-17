@@ -32,12 +32,24 @@ function Remove-DesktopShortcut ($ShortcutLabel) {
     Remove-Item "$FilePath"
 }
 
+function Remove-StartupShortcut ($ShortcutLabel) {
+    $FilePath = "${env:APPDATA}\Microsoft\Windows\Start Menu\Programs\Startup\${ShortcutLabel}.lnk"
+
+    Remove-Item "$FilePath"
+}
+
 function Set-RegistryKeyValue ($RegistryPath, $Key, $Value) {
     if (-Not (Test-Path -Path $RegistryPath)) {
         New-Item -Path $RegistryPath -Force | Out-Null
         New-ItemProperty -Path $RegistryPath -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
     } else {
         New-ItemProperty -Path $RegistryPath -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
+    }
+}
+
+function Remove-RegistryKey ($RegistryPath, $Key) {
+    if (Test-Path -Path $RegistryPath) {
+        Remove-ItemProperty -Path $RegistryPath -Name "$Key" -ErrorAction SilentlyContinue
     }
 }
 
@@ -170,6 +182,7 @@ Workflow Install-Hephaestus
                 Start-Process -FilePath "$env:TEMP\OfficeSetup\Office\Setup64.exe" -Wait
                 Dismount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img"
                 Remove-Item -Force "$env:TEMP\OfficeSetup"
+                Remove-StartupShortcut -ShortcutLabel "Send to OneNote"
             }
         } # Sequence
 
@@ -190,6 +203,7 @@ Workflow Install-Hephaestus
 
             # Install latest Skype Classic
             Install-WebRequest -Installer "SkypeSetup.exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
+            Remove-RegistryKey -RegistryPath HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Skype"
             Remove-DesktopShortcut -ShortcutLabel "Skype"
 
             # Install latest Spotify
