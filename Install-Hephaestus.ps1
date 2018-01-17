@@ -38,18 +38,18 @@ function Remove-StartupShortcut ($ShortcutLabel) {
     Remove-Item "$FilePath"
 }
 
-function Set-RegistryKeyValue ($RegistryPath, $Key, $Value) {
-    if (-Not (Test-Path -Path $RegistryPath)) {
-        New-Item -Path $RegistryPath -Force | Out-Null
-        New-ItemProperty -Path $RegistryPath -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
+function Set-RegistryKey ($Path, $Key, $Value) {
+    if (-Not (Test-Path -Path $Path)) {
+        New-Item -Path $Path -Force | Out-Null
+        New-ItemProperty -Path $Path -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
     } else {
-        New-ItemProperty -Path $RegistryPath -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
+        New-ItemProperty -Path $Path -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
     }
 }
 
-function Remove-RegistryKey ($RegistryPath, $Key) {
-    if (Test-Path -Path $RegistryPath) {
-        Remove-ItemProperty -Path $RegistryPath -Name "$Key" -ErrorAction SilentlyContinue
+function Remove-RegistryKey ($Path, $Key) {
+    if (Test-Path -Path $Path) {
+        Remove-ItemProperty -Path $Path -Name "$Key" -ErrorAction SilentlyContinue
     }
 }
 
@@ -118,22 +118,22 @@ Workflow Install-Hephaestus
             #Remove-Item "$env:TEMP\keyfiles-master.zip"
 
             # Show taskbar on main display only
-            Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key MMTaskbarEnabled -Value 0
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key MMTaskbarEnabled -Value 0
 
             # Show small taskbar buttons
-            Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key TaskbarSmallIcons -Value 1
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key TaskbarSmallIcons -Value 1
 
             # Remove Search icon from taskbar
-            Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\Search -Key SearchboxTaskbarMode -Value 0
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Search -Key SearchboxTaskbarMode -Value 0
 
             # Remove People icon from taskbar
-            Set-RegistryKeyValue -RegistryPath HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People -Key PeopleBand -Value 0
+            Set-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People -Key PeopleBand -Value 0
 
             # Prevent bloatware apps from returning
-            Set-RegistryKeyValue -RegistryPath HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent -Key DisableWindowsConsumerFeatures -Value 1
+            Set-RegistryKey -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent -Key DisableWindowsConsumerFeatures -Value 1
 
             # Prevent suggestions in Start Menu
-            Set-RegistryKeyValue -RegistryPath HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Key SystemPaneSuggestionsEnabled -Value 0
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Key SystemPaneSuggestionsEnabled -Value 0
 
             # Remove Get Office app
             Get-AppxPackage *officehub* | Remove-AppxPackage
@@ -203,7 +203,7 @@ Workflow Install-Hephaestus
 
             # Install latest Skype Classic
             Install-WebRequest -Installer "SkypeSetup.exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
-            Remove-RegistryKey -RegistryPath HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Skype"
+            Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Skype"
             Remove-DesktopShortcut -ShortcutLabel "Skype"
 
             # Install latest Spotify
