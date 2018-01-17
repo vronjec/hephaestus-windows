@@ -1,7 +1,5 @@
 # Usage:
 # > . { Invoke-WebRequest -useb https://raw.githubusercontent.com/vronjec/hephaestus-windows/master/Install-Hephaestus.ps1 } | Invoke-Expression
-# > Set-ExecutionPolicy RemoteSigned
-# > .\Setup-Hephaestus.ps1
 
 Import-Module PSWorkflow
 
@@ -55,7 +53,7 @@ function Remove-RegistryKey ($Path, $Key) {
 
 Workflow Install-Hephaestus
 {
-    # Disable System Restore
+    # Disable System Restore to improve installation speed
     Disable-ComputerRestore -Drive "C:\"
 
     # Set power saving options
@@ -298,7 +296,7 @@ Workflow Install-Hephaestus
     Enable-ComputerRestore -Drive "C:\"
 
     # Create system restore point
-    Checkpoint-Computer -Description "Initial setup with installation script" -RestorePointType APPLICATION_INSTALL
+    Checkpoint-Computer -Description "Automated setup with Hephaestus script" -RestorePointType APPLICATION_INSTALL
 
     # Restart computer
     Restart-Computer -Wait

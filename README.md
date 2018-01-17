@@ -23,7 +23,7 @@ development machine.
     *   Visual Studio Code source code editor
     *   JetBrains Toolbox (for manual installation of JetBrains apps)
     *   Docker CE for Windows
-*   Installs games and entertainment applications:
+*   Installs multimedia and entertainment applications:
     *   Nomacs image viewer
     *   MPC-HC media player
     *   Steam app (for manual installation of Steam games)
@@ -31,24 +31,25 @@ development machine.
     *   Windows Subsystem for Linux (WSL)
     *   Hyper-V 
     *   Containers
-*   Creates an initial system restore point when installation completes
+*   Creates system restore point when installation completes
     
 ## Requirements
 
-*   Windows 10 Professional
 *   Hardware support for Hyper-V virtualization
-*   Internet connectivity
+*   Internet connection
 
 ## Recommendations
 
 *   Perform a clean installation of Windows 10 Pro Insider Preview 17025
-    or newer and link Microsoft account during installation
+    or newer (for feature to access containers via published ports using
+    localhost or 127.0.0.1)
+*   Link Microsoft account during installation to access otherwise
+    unavailable Insider Preview features
 
 ## Installation
 
 ```powershell
-Set-ExecutionPolicy RemoteSigned
-.\Install-Hephaestus.ps1
+. { Invoke-WebRequest -useb https://raw.githubusercontent.com/vronjec/hephaestus-windows/master/Install-Hephaestus.ps1 } | Invoke-Expression
 ```
 
 ## Etymology
