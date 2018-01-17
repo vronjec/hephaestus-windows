@@ -54,7 +54,7 @@ function Remove-RegistryKey ($Path, $Key) {
 Workflow Install-Hephaestus
 {
     # Disable System Restore to improve installation speed
-    Disable-ComputerRestore -Drive "C:\"
+    Disable-ComputerRestore -Drive "$env:SystemDrive"
 
     # Set power saving options
     powercfg -change monitor-timeout-ac 15
@@ -68,15 +68,20 @@ Workflow Install-Hephaestus
     powercfg -setacvalueindex 381b4222-f694-41f0-9685-ff5bb260df2e 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
     powercfg -setdcvalueindex 381b4222-f694-41f0-9685-ff5bb260df2e 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
 
-    # Resolve hardware-related issues
+    # Configure hardware-related settings
     Switch -CaseSensitive ((Get-WmiObject -Class Win32_BIOS).SerialNumber) {
         "MP0ARBG" {
-            # Disable fast startup feature to fix startup issues
+            # Disable fast startup feature to fix BIOS access issues
             powercfg /hibernate off
 
             # Set service startup type to fix Bluetooth issues
             #Set-Service –Name "bthhfsrv" –StartupType "Automatic"
             #Set-Service –Name "bthserv" –StartupType "Automatic"
+
+            # Disable Intel HD Graphics tray icon
+            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key IgfxTray
+            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key HotKeysCmds
+            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key Persistence
         }
     }
 
@@ -115,6 +120,9 @@ Workflow Install-Hephaestus
             #Remove-Item -Recurse "$env:TEMP\keyfiles-master"
             #Remove-Item "$env:TEMP\keyfiles-master.zip"
 
+            # Disable startup delay for Startup applications
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize -Key StartupDelayInMSec -Value 0
+
             # Show taskbar on main display only
             Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key MMTaskbarEnabled -Value 0
 
@@ -132,6 +140,25 @@ Workflow Install-Hephaestus
 
             # Prevent suggestions in Start Menu
             Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager -Key SystemPaneSuggestionsEnabled -Value 0
+
+            # Disable Recently added apps and docs in Start Menu
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key Start_TrackDocs -Value 0
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key Start_TrackProgs -Value 0
+
+            # Disable recent files and frequent folders in Quick Access in Windows Explorer
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer -Key ShowRecent -Value 0
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer -Key ShowFrequent -Value 0
+
+            # Display hidden files, folders, drives, protected OS files and file extensions in Windows Explorer
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key Hidden -Value 1
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key ShowSuperHidden -Value 1
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key HideFileExt -Value 0
+
+            # Start on This PC instead of Quick Access in Windows Explorer
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key LaunchTo -Value 1
+
+            # Display full path in the title bar of Windows Explorer
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState -Key FullPath -Value 1
 
             # Remove Get Office app
             Get-AppxPackage *officehub* | Remove-AppxPackage
@@ -292,8 +319,14 @@ Workflow Install-Hephaestus
 
     } # Parallel
 
+    # Apply Start Menu and Quick Launch layout
+    # TODO: Undo GPO settings after restart
+    New-Item -Path Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows -Name Explorer
+    Set-ItemProperty -Path 'registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer' -Name StartLayoutFile -Value "$env:TEMP\StartLayout.xml"
+    Set-ItemProperty -Path 'registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer' -Name LockedStartLayout -Value 1
+
     # Enable System Restore
-    Enable-ComputerRestore -Drive "C:\"
+    Enable-ComputerRestore -Drive "$env:SystemDrive"
 
     # Create system restore point
     Checkpoint-Computer -Description "Automated setup with Hephaestus script" -RestorePointType APPLICATION_INSTALL
@@ -301,6 +334,62 @@ Workflow Install-Hephaestus
     # Restart computer
     Restart-Computer -Wait
 }
+
+# Create Start Menu and Quick Launch layout file
+Set-Content -Path "$env:TEMP\StartLayout.xml" -Value @"
+<?xml version="1.0" encoding="utf-8"?>
+<LayoutModificationTemplate
+    xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification"
+    xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout"
+    xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout"
+    xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout"
+    Version="1">
+    <LayoutOptions StartTileGroupsColumnCount="2" />
+    <DefaultLayoutOverride>
+        <StartLayoutCollection>
+            <defaultlayout:StartLayout GroupCellWidth="6" xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout">
+                <start:Group Name="Office" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout">
+                    <start:Tile                   Row="0" Column="0" Size="2x2"             AppUserModelID="Microsoft.WindowsCalculator_8wekyb3d8bbwe!App" />
+                    <start:DesktopApplicationTile Row="0" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Access 2016.lnk" />
+                    <start:DesktopApplicationTile Row="0" Column="4" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Excel 2016.lnk" />
+                    <start:DesktopApplicationTile Row="2" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\OneNote 2016.lnk" />
+                    <start:DesktopApplicationTile Row="2" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Outlook 2016.lnk" />
+                    <start:DesktopApplicationTile Row="2" Column="4" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\PowerPoint 2016.lnk" />
+                    <start:DesktopApplicationTile Row="4" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Publisher 2016.lnk" />
+                    <start:DesktopApplicationTile Row="4" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Word 2016.lnk" />
+                    <start:DesktopApplicationTile Row="4" Column="4" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Skype\Skype.lnk" />
+                </start:Group>
+                <start:Group Name="Development" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout">
+                    <start:DesktopApplicationTile Row="0" Column="0" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\Command Prompt.lnk" />
+                    <start:DesktopApplicationTile Row="0" Column="2" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk" />
+                    <start:Tile                   Row="0" Column="4" Size="2x2"             AppUserModelID="CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc!ubuntu" />
+                    <start:DesktopApplicationTile Row="2" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Cyberduck\Cyberduck.lnk" />
+                    <start:DesktopApplicationTile Row="2" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Adobe Photoshop CC 2018.lnk" />
+                    <start:DesktopApplicationTile Row="2" Column="4" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Visual Studio Code\Visual Studio Code.lnk" />
+                    <start:DesktopApplicationTile Row="4" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Administrative Tools\Hyper-V Manager.lnk" />
+                    <start:DesktopApplicationTile Row="4" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Docker for Windows.lnk" />
+                    <start:DesktopApplicationTile Row="4" Column="4" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\PhpStorm.lnk" />
+                </start:Group>
+                <start:Group Name="Entertainment" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout">
+                    <start:DesktopApplicationTile Row="0" Column="0" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\Spotify.lnk" />
+                    <start:DesktopApplicationTile Row="0" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Steam\Steam.lnk" />
+                </start:Group>
+            </defaultlayout:StartLayout>
+        </StartLayoutCollection>
+    </DefaultLayoutOverride>
+    <CustomTaskbarLayoutCollection PinListPlacement="Replace">
+        <defaultlayout:TaskbarLayout>
+            <taskbar:TaskbarPinList>
+                <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Google Chrome.lnk" />
+                <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Skype\Skype.lnk" />
+                <taskbar:UWA                    AppUserModelID="CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc!ubuntu" />
+                <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Visual Studio Code\Visual Studio Code.lnk" />
+                <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\PhpStorm.lnk" />
+            </taskbar:TaskbarPinList>
+        </defaultlayout:TaskbarLayout>
+    </CustomTaskbarLayoutCollection>
+</LayoutModificationTemplate>
+"@
 
 # Execute workflow as job
 Install-Hephaestus -AsJob
