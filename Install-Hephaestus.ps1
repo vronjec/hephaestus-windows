@@ -240,6 +240,7 @@ Workflow Install-Hephaestus
             Start-ScheduledTask -TaskName $TaskName
             Start-Sleep -s 1
             Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
+            Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Spotify Web Helper"
 
             # Install latest Nomacs
             Install-WebRequest -Installer "NomacsSetup.msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
