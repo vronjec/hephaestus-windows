@@ -325,6 +325,9 @@ Workflow Install-Hephaestus
     Set-ItemProperty -Path 'registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer' -Name StartLayoutFile -Value "$env:TEMP\StartLayout.xml"
     Set-ItemProperty -Path 'registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer' -Name LockedStartLayout -Value 1
 
+    # Empty Recycle Bin
+    Clear-RecycleBin -Force
+
     # Enable System Restore
     Enable-ComputerRestore -Drive "$env:SystemDrive"
 
