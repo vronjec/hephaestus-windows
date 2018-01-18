@@ -120,6 +120,9 @@ Workflow Install-Hephaestus
             #Remove-Item -Recurse "$env:TEMP\keyfiles-master"
             #Remove-Item "$env:TEMP\keyfiles-master.zip"
 
+            # Disable UAC
+            Set-RegistryKey -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Key EnableLUA -Value 0
+
             # Disable startup delay for Startup applications
             Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize -Key StartupDelayInMSec -Value 0
 
