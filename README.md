@@ -17,6 +17,7 @@ development machine.
     *   PeaZip archiver utility
 *   Installs graphic design applications and tools:
     *   Adobe Creative Cloud app (for manual installation of Adobe apps)
+    *   FileOptimizer lossless file optimizer
 *   Installs software development applications and tools:
     *   Cyberduck FTP and cloud storage client
     *   Git version control software

@@ -262,7 +262,9 @@ Workflow Install-Hephaestus
             Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--mode=silent --action=install" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
             Remove-DesktopShortcut -ShortcutLabel "Adobe Creative Cloud"
 
-            # TODO: File Optimizer
+            # Install FileOptimizer
+            Invoke-WebRequest -UserAgent [Microsoft.PowerShell.Commands.PSUserAgent]::FireFox -Uri "https://sourceforge.net/projects/nikkhokkho/files/latest/download?source=files" -OutFile "$env:TEMP\FileOptimizerSetup.exe"
+            Start-Process -FilePath "$env:TEMP\FileOptimizerSetup.exe" -ArgumentList "/S" -Wait
 
             # Install Cyberduck
             # TODO: Add version-agnostic download link to latest release
