@@ -77,14 +77,23 @@ function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
     Remove-Item "$FilePath"
 }
 
-function Remove-DesktopShortcut ($ShortcutLabel) {
-    $FilePath = "${env:USERPROFILE}\OneDrive\Desktop\${ShortcutLabel}.lnk"
+function Remove-DesktopItem ($Item) {
+    $OneDrivePath = "${env:USERPROFILE}\OneDrive\Desktop\${Item}"
+    $PublicPath = "${env:PUBLIC}\Desktop\${Item}"
 
-    Remove-Item "$FilePath"
+    if (Test-Path -Path $OneDrivePath) {
+        $FilePath = $OneDrivePath
+    } elseif (Test-Path -Path $PublicPath) {
+        $FilePath = $PublicPath
+    } else {
+        return
+    }
+
+    Remove-Item "$FilePath" -Force
 }
 
-function Remove-StartupShortcut ($ShortcutLabel) {
-    $FilePath = "${env:APPDATA}\Microsoft\Windows\Start Menu\Programs\Startup\${ShortcutLabel}.lnk"
+function Remove-StartupItem ($Item) {
+    $FilePath = "${env:APPDATA}\Microsoft\Windows\Start Menu\Programs\Startup\${Item}"
 
     Remove-Item "$FilePath"
 }
@@ -121,6 +130,9 @@ Workflow Install-Hephaestus
     powercfg -setacvalueindex 381b4222-f694-41f0-9685-ff5bb260df2e 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
     powercfg -setdcvalueindex 381b4222-f694-41f0-9685-ff5bb260df2e 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
 
+    # Disable fast startup to ease BIOS access
+    powercfg /hibernate off
+
     # Phase 1: Installation
     Parallel {
 
@@ -147,15 +159,6 @@ Workflow Install-Hephaestus
             # Install MPC-HC
             # TODO: Add version-agnostic download link to latest release
             Install-WebRequest -Installer "MPCHCSetup.exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
-
-            # Install latest Spotify
-            Invoke-WebRequest "http://download.spotify.com/SpotifyFullSetup.exe" -OutFile "$env:TEMP\SpotifySetup.exe"
-            $TaskName = "SpotifySetup"
-            $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "$env:Temp\SpotifySetup.exe /Silent"
-            Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger (New-ScheduledTaskTrigger -Once -At (Get-Date))
-            Start-ScheduledTask -TaskName $TaskName
-            Start-Sleep -s 1
-            Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
 
             # Install Adobe Creative Cloud
             Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--mode=silent --action=install" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
@@ -194,6 +197,15 @@ Workflow Install-Hephaestus
             # Install latest Docker CE for Windows
             Install-WebRequest -Installer "DockerSetup.exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
 
+            # Install latest Spotify
+            Invoke-WebRequest "http://download.spotify.com/SpotifyFullSetup.exe" -OutFile "$env:TEMP\SpotifySetup.exe"
+            $TaskName = "SpotifySetup"
+            $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "$env:Temp\SpotifySetup.exe /Silent"
+            Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger (New-ScheduledTaskTrigger -Once -At (Get-Date))
+            Start-ScheduledTask -TaskName $TaskName
+            Start-Sleep -s 1
+            Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
+
             # Install latest Steam
             Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
 
@@ -222,30 +234,27 @@ Workflow Install-Hephaestus
         } # Sequence
 
         # Install Microsoft Office 365 Personal
-        Sequence {
-            InlineScript {
-                Invoke-WebRequest "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-US/O365HomePremRetail.img" -OutFile "$env:TEMP\OfficeSetup.img"
-                New-Item -ItemType Directory -Force "$env:TEMP\OfficeSetup"
-                $Image = Mount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img" -NoDriveLetter -PassThru
-                $Drive = Get-WmiObject win32_volume -Filter "Label = '$((Get-Volume -DiskImage $Image).FileSystemLabel)'" -ErrorAction Stop
-                $Drive.AddMountPoint("$env:TEMP\OfficeSetup")
-                Start-Process -FilePath "$env:TEMP\OfficeSetup\Office\Setup64.exe" -Wait
-                Dismount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img"
-                Remove-Item -Force "$env:TEMP\OfficeSetup"
-                Remove-StartupShortcut -ShortcutLabel "Send to OneNote"
-            }
-        } # Sequence
+        InlineScript {
+            Invoke-WebRequest "https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-US/O365HomePremRetail.img" -OutFile "$env:TEMP\OfficeSetup.img"
+            New-Item -ItemType Directory -Force "$env:TEMP\OfficeSetup"
+            $Image = Mount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img" -NoDriveLetter -PassThru
+            $Drive = Get-WmiObject win32_volume -Filter "Label = '$((Get-Volume -DiskImage $Image).FileSystemLabel)'" -ErrorAction Stop
+            $Drive.AddMountPoint("$env:TEMP\OfficeSetup")
+            Start-Process -FilePath "$env:TEMP\OfficeSetup\Office\Setup64.exe" -Wait
+            Dismount-DiskImage -ImagePath "$env:TEMP\OfficeSetup.img"
+            Remove-Item -Force "$env:TEMP\OfficeSetup"
+        } # InlineScript
 
         # Enable optional Windows features
         Sequence {
             # Enable Hyper-V
-            Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All -NoRestart
+            Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All -NoRestart -WarningAction SilentlyContinue
 
             # Enabling Containers
-            Enable-WindowsOptionalFeature -FeatureName Containers -Online -All -NoRestart
+            Enable-WindowsOptionalFeature -FeatureName Containers -Online -All -NoRestart -WarningAction SilentlyContinue
 
             # Enable Windows Subsystem for Linux
-            Enable-WindowsOptionalFeature -FeatureName Microsoft-Windows-Subsystem-Linux -Online -All -NoRestart
+            Enable-WindowsOptionalFeature -FeatureName Microsoft-Windows-Subsystem-Linux -Online -All -NoRestart -WarningAction SilentlyContinue
         } # Sequence
 
     } # Parallel
@@ -263,9 +272,6 @@ Workflow Install-Hephaestus
         Sequence {
             Switch -CaseSensitive ((Get-WmiObject -Class Win32_BIOS).SerialNumber) {
                 "MP0ARBG" {
-                    # Disable fast startup feature to fix BIOS access issues
-                    powercfg /hibernate off
-
                     # Set service startup type to fix Bluetooth issues
                     #Set-Service –Name "bthhfsrv" –StartupType "Automatic"
                     #Set-Service –Name "bthserv" –StartupType "Automatic"
@@ -278,36 +284,45 @@ Workflow Install-Hephaestus
             }
         } # Sequence
 
-        # Remove unused startup applications and desktop icons
+        # Remove desktop icons and unused startup applications
         Sequence {
-            Remove-DesktopShortcut -ShortcutLabel "Google Chrome"
-            Remove-DesktopShortcut -ShortcutLabel "Mozilla Firefox"
-            Remove-DesktopShortcut -ShortcutLabel "Skype"
-            Remove-DesktopShortcut -ShortcutLabel "MPC-HC x64"
-            Remove-DesktopShortcut -ShortcutLabel "PeaZip"
-            Remove-DesktopShortcut -ShortcutLabel "Adobe Creative Cloud"
-            Remove-DesktopShortcut -ShortcutLabel "Docker for Windows"
-            Remove-DesktopShortcut -ShortcutLabel "Steam"
+            Remove-DesktopItem -Item "Google Chrome.lnk"
+            Remove-DesktopItem -Item "Mozilla Firefox.lnk"
+            Remove-DesktopItem -Item "Skype.lnk"
+            Remove-DesktopItem -Item "MPC-HC x64.lnk"
+            Remove-DesktopItem -Item "PeaZip.lnk"
+            Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
+            Remove-DesktopItem -Item "FileOptimizer.lnk"
+            Remove-DesktopItem -Item "Docker for Windows.lnk"
+            Remove-DesktopItem -Item "Spotify.lnk"
+            Remove-DesktopItem -Item "Steam.lnk"
+            Remove-DesktopItem -Item "desktop.ini"
 
+            Remove-StartupItem -Item "Send to OneNote.lnk"
             Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Skype"
             Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Spotify Web Helper"
         } # Sequence
 
         # Remove bloatware apps
         Sequence {
+            Get-AppxPackage "89006A2E.AutodeskSketchBook" | Remove-AppxPackage
             Get-AppxPackage *bingnews* | Remove-AppxPackage
-            Get-AppxPackage *bingweather* | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage
             Get-AppxPackage *disneymagic* | Remove-AppxPackage
             Get-AppxPackage *empires* | Remove-AppxPackage
             Get-AppxPackage *king.com.* | Remove-AppxPackage
-            Get-AppxPackage *messaging* | Remove-AppxPackage
-            Get-AppxPackage *officehub* | Remove-AppxPackage
-            Get-AppxPackage *onenote* | Remove-AppxPackage
-            Get-AppxPackage *photos* | Remove-AppxPackage
-            Get-AppxPackage *skypeapp* | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.GetHelp" | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.Getstarted" | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.Messaging" | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.MicrosoftOfficeHub" | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.Office.OneNote" | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.Windows.Photos" | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.SkypeApp" | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.MicrosoftSolitaireCollection" | Remove-AppxPackage
             Get-AppxPackage *winzip*| Remove-AppxPackage
             Get-AppxPackage *xboxapp* | Remove-AppxPackage
-            Get-AppxPackage *zunevideo* | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
+            Get-AppxPackage "Microsoft.ZuneVideo" | Remove-AppxPackage
         } # Sequence
 
         # Configure Windows
@@ -400,7 +415,7 @@ Workflow Install-Hephaestus
     Enable-ComputerRestore -Drive "$env:SystemDrive"
 
     # Create system restore point
-    Checkpoint-Computer -Description "Automated setup with Hephaestus script" -RestorePointType APPLICATION_INSTALL
+    Checkpoint-Computer -Description "Setup after automation script" -RestorePointType APPLICATION_INSTALL
 
     # Unregister workflow resume job
     Unregister-ScheduledJob -Name HephaestusSetupResume
@@ -411,8 +426,8 @@ Workflow Install-Hephaestus
 # Create trigger to resume script after restart
 Register-ScheduledJob -Name HephaestusSetupResume `
                       -ScheduledJobOption (New-ScheduledJobOption -StartIfOnBattery -ContinueIfGoingOnBattery -RunElevated) `
-                      -Trigger (New-JobTrigger -AtLogOn) `
-                      -ScriptBlock { Import-Module PSWorkflow; Get-Job -Name HephaestusSetup -State Suspended | Resume-Job }
+                      -Trigger (New-JobTrigger -AtLogOn -User "$env:username") `
+                      -ScriptBlock { Import-Module PSWorkflow; Get-Job -Name HephaestusSetup | Resume-Job }
 
 # Execute workflow as job
 Install-Hephaestus -JobName HephaestusSetup
