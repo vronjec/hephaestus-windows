@@ -82,14 +82,12 @@ function Remove-DesktopItem ($Item) {
     $PublicPath = "${env:PUBLIC}\Desktop\${Item}"
 
     if (Test-Path -Path $OneDrivePath) {
-        $FilePath = $OneDrivePath
-    } elseif (Test-Path -Path $PublicPath) {
-        $FilePath = $PublicPath
-    } else {
-        return
+        Remove-Item $OneDrivePath
     }
-
-    Remove-Item "$FilePath" -Force
+    
+    if (Test-Path -Path $PublicPath) {
+        Remove-Item $PublicPath
+    } 
 }
 
 function Remove-StartupItem ($Item) {
@@ -265,24 +263,18 @@ Workflow Install-Hephaestus
     # Phase 2: Customization
     Parallel {
 
-        # Set computer name
-        Rename-Computer -NewName "hephaestus" -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
-
-        # Configure hardware-specific settings
-        Sequence {
-            Switch -CaseSensitive ((Get-WmiObject -Class Win32_BIOS).SerialNumber) {
-                "MP0ARBG" {
-                    # Set service startup type to fix Bluetooth issues
-                    #Set-Service –Name "bthhfsrv" –StartupType "Automatic"
-                    #Set-Service –Name "bthserv" –StartupType "Automatic"
-
-                    # Disable Intel HD Graphics tray icon
-                    Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key IgfxTray
-                    Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key HotKeysCmds
-                    Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key Persistence
-                }
+        # Set computer name and configure hardware-specific settings
+        Switch -CaseSensitive ((Get-WmiObject -Class Win32_BIOS).SerialNumber) {
+            "MP0ARBG" {
+                # Set service startup type to fix Bluetooth issues
+                #Set-Service –Name "bthhfsrv" –StartupType "Automatic"
+                #Set-Service –Name "bthserv" –StartupType "Automatic"
             }
-        } # Sequence
+
+            default {
+                Rename-Computer -NewName "hephaestus" -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
+            }
+        }
 
         # Remove desktop icons and unused startup applications
         Sequence {
@@ -297,6 +289,11 @@ Workflow Install-Hephaestus
             Remove-DesktopItem -Item "Spotify.lnk"
             Remove-DesktopItem -Item "Steam.lnk"
             Remove-DesktopItem -Item "desktop.ini"
+
+            # Disable Intel HD Graphics tray icon
+            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key IgfxTray
+            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key HotKeysCmds
+            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key Persistence
 
             Remove-StartupItem -Item "Send to OneNote.lnk"
             Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Skype"
@@ -406,7 +403,7 @@ Workflow Install-Hephaestus
     # Phase 3: Clean up
 
     # Unlock Start Menu and Quick Launch layout
-    Set-ItemProperty -Path 'registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer' -Name LockedStartLayout -Value 0
+    Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name LockedStartLayout -Value 0
 
     # Empty Recycle Bin
     Clear-RecycleBin -Force
@@ -418,15 +415,14 @@ Workflow Install-Hephaestus
     Checkpoint-Computer -Description "Setup after automation script" -RestorePointType APPLICATION_INSTALL
 
     # Unregister workflow resume job
-    Unregister-ScheduledJob -Name HephaestusSetupResume
+    Unregister-ScheduledJob -Name ResumeHephaestusSetup
 }
 
 #$credential = $Host.UI.PromptForCredential("Task username and password",$msg,"$env:userdomain\$env:username",$env:userdomain)
 
 # Create trigger to resume script after restart
-Register-ScheduledJob -Name HephaestusSetupResume `
-                      -ScheduledJobOption (New-ScheduledJobOption -StartIfOnBattery -ContinueIfGoingOnBattery -RunElevated) `
-                      -Trigger (New-JobTrigger -AtLogOn -User "$env:username") `
+Register-ScheduledJob -Name ResumeHephaestusSetup `
+                      -Trigger (New-JobTrigger -AtStartup) `
                       -ScriptBlock { Import-Module PSWorkflow; Get-Job -Name HephaestusSetup | Resume-Job }
 
 # Execute workflow as job
