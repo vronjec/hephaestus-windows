@@ -423,7 +423,12 @@ Workflow Install-Hephaestus
 # Create trigger to resume script after restart
 Register-ScheduledJob -Name ResumeHephaestusSetup `
                       -Trigger (New-JobTrigger -AtStartup) `
+                      -ScheduledJobOption (New-ScheduledJobOption -StartIfOnBattery -ContinueIfGoingOnBattery -RunElevated) `
                       -ScriptBlock { Import-Module PSWorkflow; Get-Job -Name HephaestusSetup | Resume-Job }
+
+Set-ScheduledTask -TaskPath '\Microsoft\Windows\PowerShell\ScheduledJobs\' `
+                  -TaskName ResumeHephaestusSetup `
+                  -Principal (New-ScheduledTaskPrincipal -LogonType Interactive -UserId $env:USERNAME)
 
 # Execute workflow as job
 Install-Hephaestus -JobName HephaestusSetup
