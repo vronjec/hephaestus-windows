@@ -276,30 +276,6 @@ Workflow Install-Hephaestus
             }
         }
 
-        # Remove desktop icons and unused startup applications
-        Sequence {
-            Remove-DesktopItem -Item "Google Chrome.lnk"
-            Remove-DesktopItem -Item "Mozilla Firefox.lnk"
-            Remove-DesktopItem -Item "Skype.lnk"
-            Remove-DesktopItem -Item "MPC-HC x64.lnk"
-            Remove-DesktopItem -Item "PeaZip.lnk"
-            Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
-            Remove-DesktopItem -Item "FileOptimizer.lnk"
-            Remove-DesktopItem -Item "Docker for Windows.lnk"
-            Remove-DesktopItem -Item "Spotify.lnk"
-            Remove-DesktopItem -Item "Steam.lnk"
-            Remove-DesktopItem -Item "desktop.ini"
-
-            # Disable Intel HD Graphics tray icon
-            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key IgfxTray
-            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key HotKeysCmds
-            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key Persistence
-
-            Remove-StartupItem -Item "Send to OneNote.lnk"
-            Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Skype"
-            Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Spotify Web Helper"
-        } # Sequence
-
         # Remove bloatware apps
         Sequence {
             Get-AppxPackage "89006A2E.AutodeskSketchBook" | Remove-AppxPackage
@@ -320,6 +296,32 @@ Workflow Install-Hephaestus
             Get-AppxPackage *xboxapp* | Remove-AppxPackage
             Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
             Get-AppxPackage "Microsoft.ZuneVideo" | Remove-AppxPackage
+        } # Sequence
+
+        # Remove desktop icons and unused startup applications
+        Sequence {
+            # Remove application icons
+            Remove-DesktopItem -Item "Google Chrome.lnk"
+            Remove-DesktopItem -Item "Mozilla Firefox.lnk"
+            Remove-DesktopItem -Item "Skype.lnk"
+            Remove-DesktopItem -Item "MPC-HC x64.lnk"
+            Remove-DesktopItem -Item "PeaZip.lnk"
+            Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
+            Remove-DesktopItem -Item "FileOptimizer.lnk"
+            Remove-DesktopItem -Item "Docker for Windows.lnk"
+            Remove-DesktopItem -Item "Spotify.lnk"
+            Remove-DesktopItem -Item "Steam.lnk"
+            Remove-DesktopItem -Item "desktop.ini"
+
+            # Disable startup applications
+            Remove-StartupItem -Item "Send to OneNote.lnk"
+            Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Skype"
+            Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Spotify Web Helper"
+
+            # Disable Intel HD Graphics tray icon
+            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key IgfxTray
+            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key HotKeysCmds
+            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key Persistence
         } # Sequence
 
         # Configure Windows
@@ -414,21 +416,15 @@ Workflow Install-Hephaestus
     # Create system restore point
     Checkpoint-Computer -Description "Setup after automation script" -RestorePointType APPLICATION_INSTALL
 
-    # Unregister workflow resume job
-    Unregister-ScheduledJob -Name ResumeHephaestusSetup
+    # Unregister workflow resume task
+    Unregister-ScheduledTask -Name ResumeHephaestusSetup
 }
 
-#$credential = $Host.UI.PromptForCredential("Task username and password",$msg,"$env:userdomain\$env:username",$env:userdomain)
-
-# Create trigger to resume script after restart
-Register-ScheduledJob -Name ResumeHephaestusSetup `
-                      -Trigger (New-JobTrigger -AtStartup) `
-                      -ScheduledJobOption (New-ScheduledJobOption -StartIfOnBattery -ContinueIfGoingOnBattery -RunElevated) `
-                      -ScriptBlock { Import-Module PSWorkflow; Get-Job -Name HephaestusSetup | Resume-Job }
-
-Set-ScheduledTask -TaskPath '\Microsoft\Windows\PowerShell\ScheduledJobs\' `
-                  -TaskName ResumeHephaestusSetup `
-                  -Principal (New-ScheduledTaskPrincipal -LogonType Interactive -UserId $env:USERNAME)
+# Create task to resume workflow after restart
+Register-ScheduledTask -TaskName ResumeHephaestusSetup `
+                       -Action (New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-Verb runAs -Command &{ Import-Module PSWorkflow; Get-Job -Name HephaestusSetup | Resume-Job }") `
+                       -Principal (New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest) `
+                       -Trigger (New-ScheduledTaskTrigger -AtLogOn)
 
 # Execute workflow as job
 Install-Hephaestus -JobName HephaestusSetup
