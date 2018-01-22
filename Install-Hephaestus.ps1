@@ -168,6 +168,10 @@ Workflow Install-Hephaestus
             # TODO: Add version-agnostic download link to latest release
             Install-WebRequest -Installer "PeaZipSetup.exe" -ArgumentList "/VERYSILENT" -Uri "http://www.peazip.org/downloads/peazip-6.5.0.WIN64.exe"
 
+            # Install OpenVPN
+            # TODO: https://github.com/openvpn/openvpn-gui
+            Install-WebRequest -Installer "OpenVPNSetup.exe" -ArgumentList "/S" -Uri "http://build.openvpn.net/downloads/releases/latest/openvpn-install-latest-stable.exe"
+
             # Install Cyberduck
             # TODO: Add version-agnostic download link to latest release
             Install-WebRequest -Installer "CyberduckSetup.exe" -ArgumentList "/quiet" -Uri "https://update.cyberduck.io/windows/Cyberduck-Installer-6.3.5.27408.exe"
