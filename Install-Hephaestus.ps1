@@ -113,10 +113,6 @@ function Remove-RegistryKey ($Path, $Key) {
 
 Workflow Install-Hephaestus
 {
-    # Start log
-    New-Item -ItemType Directory -Force "$env:TEMP\HephaestusSetupLogs"
-    Start-Transcript -OutputDirectory "$env:TEMP\HephaestusSetupLogs"
-
     # Disable System Restore to improve installation speed
     Disable-ComputerRestore -Drive "$env:SystemDrive"
 
@@ -182,7 +178,7 @@ Workflow Install-Hephaestus
             Install-WebRequest -Installer "GitSetup.exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"
 
             # Install latest Le VPN
-            Install-WebRequest -Installer "LeVPNSetup.exe" -ArgumentList "/S" -Uri "https://www.le-vpn.com/clients/Le-VPN-Setup.exe"
+            #Install-WebRequest -Installer "LeVPNSetup.exe" -ArgumentList "/S" -Uri "https://www.le-vpn.com/clients/Le-VPN-Setup.exe"
 
             # Install latest Visual Studio Code
             Install-WebRequest -Installer "VSCodeSetup.exe" -ArgumentList "/verysilent /suppressmsgboxes /mergetasks=!runcode,!desktopicon,quicklaunchicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
@@ -201,15 +197,6 @@ Workflow Install-Hephaestus
 
             # Install latest Docker CE for Windows
             Install-WebRequest -Installer "DockerSetup.exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
-
-            # Install latest Spotify
-            Invoke-WebRequest "http://download.spotify.com/SpotifyFullSetup.exe" -OutFile "$env:TEMP\SpotifySetup.exe"
-            $TaskName = "SpotifySetup"
-            $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "$env:Temp\SpotifySetup.exe /Silent"
-            Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger (New-ScheduledTaskTrigger -Once -At (Get-Date))
-            Start-ScheduledTask -TaskName $TaskName
-            Start-Sleep -s 1
-            Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
 
             # Install latest Steam
             Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
@@ -406,8 +393,8 @@ Workflow Install-Hephaestus
 
     } # Parallel
 
-    # Restart computer
-    Restart-Computer -Wait
+    # Suspend workflow until next logon
+    Suspend-Workflow
 
     # Phase 3: Clean up
 
@@ -424,16 +411,13 @@ Workflow Install-Hephaestus
     Checkpoint-Computer -Description "Setup after automation script" -RestorePointType APPLICATION_INSTALL
 
     # Unregister workflow resume task
-    Unregister-ScheduledTask -Name ResumeHephaestusSetup
-
-    # Stop log
-    Stop-Transcript
+    Unregister-ScheduledTask -Name ResumeHephaestusSetup -Confirm:$false
 }
 
 # Create task to resume workflow after restart
 Register-ScheduledTask -TaskName ResumeHephaestusSetup `
-                       -Action (New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-Verb runAs -Command &{ Import-Module PSWorkflow; Get-Job -Name HephaestusSetup | Resume-Job }") `
-                       -Principal (New-ScheduledTaskPrincipal -GroupId "BUILTIN\Administrators" -RunLevel Highest) `
+                       -Action (New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-WindowStyle Normal -NoLogo -NoProfile -NoExit -Command &{ Import-Module PSWorkflow; Get-Job -Name HephaestusSetup | Resume-Job -Wait | Wait-Job }") `
+                       -RunLevel Highest `
                        -Trigger (New-ScheduledTaskTrigger -AtLogOn)
 
 # Execute workflow as job
