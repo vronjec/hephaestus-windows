@@ -113,6 +113,10 @@ function Remove-RegistryKey ($Path, $Key) {
 
 Workflow Install-Hephaestus
 {
+    # Start log
+    New-Item -ItemType Directory -Force "$env:TEMP\HephaestusSetupLogs"
+    Start-Transcript -OutputDirectory "$env:TEMP\HephaestusSetupLogs"
+
     # Disable System Restore to improve installation speed
     Disable-ComputerRestore -Drive "$env:SystemDrive"
 
@@ -421,6 +425,9 @@ Workflow Install-Hephaestus
 
     # Unregister workflow resume task
     Unregister-ScheduledTask -Name ResumeHephaestusSetup
+
+    # Stop log
+    Stop-Transcript
 }
 
 # Create task to resume workflow after restart
