@@ -90,16 +90,28 @@ function Remove-DesktopItem ($Item) {
     if (Test-Path -Path $OneDrivePath) {
         Remove-Item -Path $OneDrivePath -Force
     }
-    
+
     if (Test-Path -Path $PublicPath) {
         Remove-Item -Path $PublicPath -Force
-    } 
+    }
 }
 
 function Remove-StartupItem ($Item) {
-    $FilePath = "${env:APPDATA}\Microsoft\Windows\Start Menu\Programs\Startup\${Item}"
+    $StartupShortcutPath = "${env:APPDATA}\Microsoft\Windows\Start Menu\Programs\Startup\${Item}.lnk"
+    $CurrentUserRegistryPath = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+    $LocalMachineRegistryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
 
-    Remove-Item "$FilePath"
+    if (Test-Path -Path "$StartupShortcutPath") {
+        Remove-Item -Path "$StartupShortcutPath" -Force
+    }
+
+    if (Get-Member -InputObject (Get-ItemProperty -Path "$CurrentUserRegistryPath") -Name ${Item}) {
+        Remove-ItemProperty -Path $CurrentUserRegistryPath -Name "$Item" -ErrorAction SilentlyContinue
+    }
+
+    if (Get-Member -InputObject (Get-ItemProperty -Path "$LocalMachineRegistryPath") -Name ${Item}) {
+        Remove-ItemProperty -Path $LocalMachineRegistryPath -Name "$Item" -ErrorAction SilentlyContinue
+    }
 }
 
 function Set-RegistryKey ($Path, $Key, $Value) {
@@ -108,12 +120,6 @@ function Set-RegistryKey ($Path, $Key, $Value) {
         New-ItemProperty -Path $Path -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
     } else {
         New-ItemProperty -Path $Path -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
-    }
-}
-
-function Remove-RegistryKey ($Path, $Key) {
-    if (Test-Path -Path $Path) {
-        Remove-ItemProperty -Path $Path -Name "$Key" -ErrorAction SilentlyContinue
     }
 }
 
@@ -276,6 +282,31 @@ Workflow Install-Hephaestus
             }
         }
 
+        # Remove desktop icons and unused startup applications
+        Sequence {
+            Remove-DesktopItem -Item "Google Chrome.lnk"
+            Remove-DesktopItem -Item "Firefox.lnk"
+            Remove-DesktopItem -Item "Skype.lnk"
+            Remove-DesktopItem -Item "MPC-HC x64.lnk"
+            Remove-DesktopItem -Item "PeaZip.lnk"
+            Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
+            Remove-DesktopItem -Item "FileOptimizer.lnk"
+            Remove-DesktopItem -Item "Le VPN.lnk"
+            Remove-DesktopItem -Item "Docker for Windows.lnk"
+            Remove-DesktopItem -Item "Spotify.lnk"
+            Remove-DesktopItem -Item "Steam.lnk"
+            Remove-DesktopItem -Item "desktop.ini"
+
+            Remove-StartupItem -Item "Send to OneNote"
+            Remove-StartupItem -Item "Skype"
+            Remove-StartupItem -Item "Spotify Web Helper"
+
+            # Disable Intel HD Graphics tray icon
+            Remove-StartupItem -Item "IgfxTray"
+            Remove-StartupItem -Item "HotKeysCmds"
+            Remove-StartupItem -Item "Persistence"
+        } # Sequence
+
         # Remove bloatware apps
         Sequence {
             Get-AppxPackage "89006A2E.AutodeskSketchBook" | Remove-AppxPackage
@@ -296,33 +327,6 @@ Workflow Install-Hephaestus
             Get-AppxPackage *xboxapp* | Remove-AppxPackage
             Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
             Get-AppxPackage "Microsoft.ZuneVideo" | Remove-AppxPackage
-        } # Sequence
-
-        # Remove desktop icons and unused startup applications
-        Sequence {
-            # Remove application icons
-            Remove-DesktopItem -Item "Google Chrome.lnk"
-            Remove-DesktopItem -Item "Firefox.lnk"
-            Remove-DesktopItem -Item "Skype.lnk"
-            Remove-DesktopItem -Item "MPC-HC x64.lnk"
-            Remove-DesktopItem -Item "PeaZip.lnk"
-            Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
-            Remove-DesktopItem -Item "FileOptimizer.lnk"
-            Remove-DesktopItem -Item "Le VPN.lnk"
-            Remove-DesktopItem -Item "Docker for Windows.lnk"
-            Remove-DesktopItem -Item "Spotify.lnk"
-            Remove-DesktopItem -Item "Steam.lnk"
-            Remove-DesktopItem -Item "desktop.ini"
-
-            # Disable startup applications
-            Remove-StartupItem -Item "Send to OneNote.lnk"
-            Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Skype"
-            Remove-RegistryKey -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key "Spotify Web Helper"
-
-            # Disable Intel HD Graphics tray icon
-            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key IgfxTray
-            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key HotKeysCmds
-            Remove-RegistryKey -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -Key Persistence
         } # Sequence
 
         # Configure Windows
