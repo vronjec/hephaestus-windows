@@ -22,21 +22,25 @@ Set-Content -Path "$env:TEMP\StartLayout.xml" -Value @"
                     <start:DesktopApplicationTile Row="2" Column="4" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\PowerPoint 2016.lnk" />
                     <start:DesktopApplicationTile Row="4" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Publisher 2016.lnk" />
                     <start:DesktopApplicationTile Row="4" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Word 2016.lnk" />
-                    <start:DesktopApplicationTile Row="4" Column="4" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Skype\Skype.lnk" />
+                    <start:Tile                   Row="4" Column="4" Size="2x2"             AppUserModelID="45273LiamForsyth.PawsforTrello_7pb5ddty8z1pa!trello" />
                 </start:Group>
                 <start:Group Name="Development" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout">
                     <start:DesktopApplicationTile Row="0" Column="0" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\Command Prompt.lnk" />
                     <start:DesktopApplicationTile Row="0" Column="2" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk" />
-                    <start:Tile                   Row="0" Column="4" Size="2x2"             AppUserModelID="CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc!ubuntu" />
-                    <start:DesktopApplicationTile Row="2" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Cyberduck\Cyberduck.lnk" />
-                    <start:DesktopApplicationTile Row="2" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Adobe Photoshop CC 2018.lnk" />
-                    <start:DesktopApplicationTile Row="2" Column="4" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Visual Studio Code\Visual Studio Code.lnk" />
-                    <start:DesktopApplicationTile Row="4" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Administrative Tools\Hyper-V Manager.lnk" />
-                    <start:DesktopApplicationTile Row="4" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Docker for Windows.lnk" />
+                    <start:DesktopApplicationTile Row="0" Column="4" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell ISE.lnk" />
+                    <start:DesktopApplicationTile Row="2" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Administrative Tools\Hyper-V Manager.lnk" />
+                    <start:DesktopApplicationTile Row="2" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Docker for Windows.lnk" />
+                    <start:Tile                   Row="2" Column="4" Size="2x2"             AppUserModelID="CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc!ubuntu" />
+                    <start:DesktopApplicationTile Row="4" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Cyberduck\Cyberduck.lnk" />
+                    <start:DesktopApplicationTile Row="4" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Visual Studio Code\Visual Studio Code.lnk" />
                     <start:DesktopApplicationTile Row="4" Column="4" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\PhpStorm.lnk" />
                 </start:Group>
+                <start:Group Name="Design" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout">
+                    <start:DesktopApplicationTile Row="0" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Adobe Photoshop CC 2018.lnk" />
+                    <start:DesktopApplicationTile Row="0" Column="2" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\FileOptimizer\Launch FileOptimizer.lnk" />
+                </start:Group>
                 <start:Group Name="Entertainment" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout">
-                    <start:DesktopApplicationTile Row="0" Column="0" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\Spotify.lnk" />
+                    <start:Tile                   Row="0" Column="0" Size="2x2"             AppUserModelID="SpotifyAB.SpotifyMusic_zpdnekdrzrea0!Spotify" />
                     <start:DesktopApplicationTile Row="0" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Steam\Steam.lnk" />
                 </start:Group>
             </defaultlayout:StartLayout>
@@ -46,10 +50,12 @@ Set-Content -Path "$env:TEMP\StartLayout.xml" -Value @"
         <defaultlayout:TaskbarLayout>
             <taskbar:TaskbarPinList>
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Google Chrome.lnk" />
+                <taskbar:UWA                    AppUserModelID="91750D7E.Slack_8she8kybcnzg4!Slack" />
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Skype\Skype.lnk" />
-                <taskbar:UWA                    AppUserModelID="CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc!ubuntu" />
-                <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Visual Studio Code\Visual Studio Code.lnk" />
+                <taskbar:UWA                    AppUserModelID="45273LiamForsyth.PawsforTrello_7pb5ddty8z1pa!trello" />
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\PhpStorm.lnk" />
+                <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Adobe Photoshop CC 2018.lnk" />
+                <taskbar:UWA                    AppUserModelID="CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc!ubuntu" />
             </taskbar:TaskbarPinList>
         </defaultlayout:TaskbarLayout>
     </CustomTaskbarLayoutCollection>
@@ -178,7 +184,7 @@ Workflow Install-Hephaestus
             Install-WebRequest -Installer "GitSetup.exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"
 
             # Install latest Le VPN
-            #Install-WebRequest -Installer "LeVPNSetup.exe" -ArgumentList "/S" -Uri "https://www.le-vpn.com/clients/Le-VPN-Setup.exe"
+            Install-WebRequest -Installer "LeVPNSetup.exe" -ArgumentList "/S" -Uri "https://www.le-vpn.com/clients/Le-VPN-Setup.exe"
 
             # Install latest Visual Studio Code
             Install-WebRequest -Installer "VSCodeSetup.exe" -ArgumentList "/verysilent /suppressmsgboxes /mergetasks=!runcode,!desktopicon,quicklaunchicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
@@ -296,12 +302,13 @@ Workflow Install-Hephaestus
         Sequence {
             # Remove application icons
             Remove-DesktopItem -Item "Google Chrome.lnk"
-            Remove-DesktopItem -Item "Mozilla Firefox.lnk"
+            Remove-DesktopItem -Item "Firefox.lnk"
             Remove-DesktopItem -Item "Skype.lnk"
             Remove-DesktopItem -Item "MPC-HC x64.lnk"
             Remove-DesktopItem -Item "PeaZip.lnk"
             Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
             Remove-DesktopItem -Item "FileOptimizer.lnk"
+            Remove-DesktopItem -Item "Le VPN.lnk"
             Remove-DesktopItem -Item "Docker for Windows.lnk"
             Remove-DesktopItem -Item "Spotify.lnk"
             Remove-DesktopItem -Item "Steam.lnk"
