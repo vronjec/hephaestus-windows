@@ -62,16 +62,16 @@ Set-Content -Path "$env:TEMP\StartLayout.xml" -Value @"
 </LayoutModificationTemplate>
 "@
 
-function Install-WebRequest ($Installer, $ArgumentList, $Uri) {
-    $FilePath = "$env:TEMP\$Installer"
+function Install-DesktopApplication ($Name, $FileType, $ArgumentList, $Uri) {
+    $FilePath = "$env:TEMP\${Name}Setup.${FileType}"
 
     # Enable TLS 1.2
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
     Invoke-WebRequest -UserAgent [Microsoft.PowerShell.Commands.PSUserAgent]::FireFox -Uri "$Uri" -OutFile "$FilePath"
 
-    Switch ([IO.Path]::GetExtension("$FilePath")) {
-        ".msi" {
+    Switch ($FileType) {
+        "msi" {
             Start-Process -FilePath msiexec -ArgumentList "/i $FilePath $ArgumentList" -Wait
         }
 
@@ -148,56 +148,34 @@ Workflow Install-Hephaestus
 
         # Install applications
         Sequence {
-            # Install latest Chrome
-            Install-WebRequest -Installer "ChromeSetup.msi" -ArgumentList "/quiet" -Uri "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi"
+            Install-DesktopApplication -Name "Chrome" -FileType "msi" -ArgumentList "/quiet" -Uri "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi"
+            Install-DesktopApplication -Name "Firefox" -FileType "exe" -ArgumentList "-ms" -Uri "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
+            Install-DesktopApplication -Name "Opera" -FileType "exe" -ArgumentList "/silent /allusers=yes /launchopera=no /desktopshortcut=no /setdefaultbrowser=no /pintotaskbar=no /startmenushortcut=yes" -Uri "https://net.geo.opera.com/opera/stable/windows"
+            Install-DesktopApplication -Name "LastPass" -FileType "exe" -ArgumentList "--silinstall --userinstallchrome --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Uri "https://lastpass.com/download/cdn/lastpass_x64.exe"
+            Install-DesktopApplication -Name "Skype" -FileType "exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
+            Install-DesktopApplication -Name "Nomacs" -FileType "msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
 
-            # Install latest Firefox
-            Install-WebRequest -Installer "FirefoxSetup.exe" -ArgumentList "-ms" -Uri "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
-
-            # Install latest Opera
-            Install-WebRequest -Installer "OperaSetup.exe" -ArgumentList "/silent /allusers=yes /launchopera=no /desktopshortcut=no /setdefaultbrowser=no /pintotaskbar=no /startmenushortcut=yes" -Uri "https://net.geo.opera.com/opera/stable/windows"
-
-            # Install latest LastPass browser extensions
-            Install-WebRequest -Installer "LastPassSetup.exe" -ArgumentList "--silinstall --userinstallchrome --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Uri "https://lastpass.com/download/cdn/lastpass_x64.exe"
-
-            # Install latest Skype Classic
-            Install-WebRequest -Installer "SkypeSetup.exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
-
-            # Install latest Nomacs
-            Install-WebRequest -Installer "NomacsSetup.msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
-
-            # Install MPC-HC
             # TODO: Add version-agnostic download link to latest release
-            Install-WebRequest -Installer "MPCHCSetup.exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
+            Install-DesktopApplication -Name "MPC-HC" -FileType "exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
 
-            # Install Adobe Creative Cloud
-            Install-WebRequest -Installer "CreativeCloudSetup.exe" -ArgumentList "--mode=silent --action=install" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
+            Install-DesktopApplication -Name "CreativeCloud" -FileType "exe" -ArgumentList "--mode=silent --action=install" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
+            Install-DesktopApplication -Name "FileOptimizer" -FileType "exe" -ArgumentList "/S" -Uri "https://sourceforge.net/projects/nikkhokkho/files/latest/download?source=files"
 
-            # Install FileOptimizer
-            Install-WebRequest -Installer "FileOptimizerSetup.exe" -ArgumentList "/S" -Uri "https://sourceforge.net/projects/nikkhokkho/files/latest/download?source=files"
-
-            # Install PeaZip
             # TODO: Add version-agnostic download link to latest release
-            Install-WebRequest -Installer "PeaZipSetup.exe" -ArgumentList "/VERYSILENT" -Uri "http://www.peazip.org/downloads/peazip-6.5.0.WIN64.exe"
+            Install-DesktopApplication -Name "PeaZip" -FileType "exe" -ArgumentList "/VERYSILENT" -Uri "http://www.peazip.org/downloads/peazip-6.5.0.WIN64.exe"
 
-            # Install Cyberduck
             # TODO: Add version-agnostic download link to latest release
-            Install-WebRequest -Installer "CyberduckSetup.exe" -ArgumentList "/quiet" -Uri "https://update.cyberduck.io/windows/Cyberduck-Installer-6.3.5.27408.exe"
+            Install-DesktopApplication -Name "Cyberduck" -FileType "exe" -ArgumentList "/quiet" -Uri "https://update.cyberduck.io/windows/Cyberduck-Installer-6.3.5.27408.exe"
 
-            # Install Git
             # TODO: Refine installation: https://github.com/msysgit/msysgit/wiki/Silent-or-Unattended-Installation
             # TODO: Add version-agnostic download link to latest release
-            Install-WebRequest -Installer "GitSetup.exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"
+            Install-DesktopApplication -Name "Git" -FileType "exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"
 
-            # Install latest Le VPN
-            Install-WebRequest -Installer "LeVPNSetup.exe" -ArgumentList "/S" -Uri "https://www.le-vpn.com/clients/Le-VPN-Setup.exe"
+            Install-DesktopApplication -Name "LeVPN" -FileType "exe" -ArgumentList "/S" -Uri "https://www.le-vpn.com/clients/Le-VPN-Setup.exe"
+            Install-DesktopApplication -Name "VSCode" -FileType "exe" -ArgumentList "/verysilent /suppressmsgboxes /mergetasks=!runcode,!desktopicon,quicklaunchicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
 
-            # Install latest Visual Studio Code
-            Install-WebRequest -Installer "VSCodeSetup.exe" -ArgumentList "/verysilent /suppressmsgboxes /mergetasks=!runcode,!desktopicon,quicklaunchicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
-
-            # Install JetBrains Toolbox
             # TODO: Add version-agnostic download link to latest release
-            Install-WebRequest -Installer "JetBrainsSetup.exe" -ArgumentList "/S /NoDesktopIcon" -Uri "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe"
+            Install-DesktopApplication -Name "JetBrains" -FileType "exe" -ArgumentList "/S /NoDesktopIcon" -Uri "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe"
 
             # TODO: Java Development Kit
             # TODO: Add version-agnostic download link to latest release
@@ -207,11 +185,8 @@ Workflow Install-Hephaestus
             # TODO: Android Studio
             # TODO: Visual Studio Emulator for Android (https://aka.ms/vscomemudownload)
 
-            # Install latest Docker CE for Windows
-            Install-WebRequest -Installer "DockerSetup.exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
-
-            # Install latest Steam
-            Install-WebRequest -Installer "SteamSetup.exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
+            Install-DesktopApplication -Name "Docker" -FileType "exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
+            Install-DesktopApplication -Name "Steam" -FileType "exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
 
             # TODO: C++ Redistributable Visual Studio 2017
             # https://aka.ms/vs/15/release/VC_redist.x64.exe
