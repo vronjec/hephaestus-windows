@@ -88,11 +88,11 @@ function Remove-DesktopItem ($Item) {
     $PublicPath = "${env:PUBLIC}\Desktop\${Item}"
 
     if (Test-Path -Path $OneDrivePath) {
-        Remove-Item $OneDrivePath
+        Remove-Item -Path $OneDrivePath -Force
     }
     
     if (Test-Path -Path $PublicPath) {
-        Remove-Item $PublicPath
+        Remove-Item -Path $PublicPath -Force
     } 
 }
 
