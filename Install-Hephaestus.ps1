@@ -413,7 +413,7 @@ Workflow Install-Hephaestus
     Enable-ComputerRestore -Drive "$env:SystemDrive"
 
     # Create system restore point
-    Checkpoint-Computer -Description "Setup after automation script" -RestorePointType APPLICATION_INSTALL
+    Checkpoint-Computer -Description "Setup after Hephaestus automation script" -RestorePointType APPLICATION_INSTALL
 
     # Unregister workflow resume task
     Unregister-ScheduledTask -Name ResumeHephaestusSetup -Confirm:$false
