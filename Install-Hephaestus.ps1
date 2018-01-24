@@ -146,7 +146,7 @@ Workflow Install-Hephaestus
     # Phase 1: Automatic installation
     Parallel {
 
-        # Install applications
+        # Install desktop applications
         Sequence {
             Install-DesktopApplication -Name "Chrome" -FileType "msi" -ArgumentList "/quiet" -Uri "https://dl.google.com/chrome/install/googlechromestandaloneenterprise64.msi"
             Install-DesktopApplication -Name "Firefox" -FileType "exe" -ArgumentList "-ms" -Uri "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
@@ -187,29 +187,6 @@ Workflow Install-Hephaestus
 
             Install-DesktopApplication -Name "Docker" -FileType "exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
             Install-DesktopApplication -Name "Steam" -FileType "exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
-
-            # TODO: C++ Redistributable Visual Studio 2017
-            # https://aka.ms/vs/15/release/VC_redist.x64.exe
-            # https://aka.ms/vs/15/release/VC_redist.x86.exe
-
-            # TODO: Apache 2.4 (32bit)
-            # TODO: Apache 2.4 (64bit)
-
-            # TODO: PHP 5.6 (32bit)
-            # TODO: PHP 5.6 (64bit)
-            # TODO: Microsoft ODBC Driver for SQL Server 11
-            # Install MsSQL-ODBC-11.msi
-            # TODO: Microsoft PHP Driver for SQL Server 3.2
-            # Install PHP extension MsSQL-PHP-3.2.exe to PHP 5.6 ext/ directory
-            # Enable PHP extension in PHP 5.6
-
-            # TODO: PHP 7.0 (32bit)
-            # TODO: PHP 7.0 (64bit)
-            # TODO: Microsoft ODBC Driver for SQL Server 13.1
-            # Install MsSQL-ODBC-13.1.msi
-            # TODO: Microsoft PHP Driver for SQL Server 4.0
-            # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.0 ext/ directory
-            # Enable PHP extension in PHP 7.0
         } # Sequence
 
         # Install Microsoft Office 365 Personal
@@ -226,13 +203,8 @@ Workflow Install-Hephaestus
 
         # Enable optional Windows features
         Sequence {
-            # Enable Hyper-V
             Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All -NoRestart -WarningAction SilentlyContinue
-
-            # Enabling Containers
             Enable-WindowsOptionalFeature -FeatureName Containers -Online -All -NoRestart -WarningAction SilentlyContinue
-
-            # Enable Windows Subsystem for Linux
             Enable-WindowsOptionalFeature -FeatureName Microsoft-Windows-Subsystem-Linux -Online -All -NoRestart -WarningAction SilentlyContinue
         } # Sequence
 
@@ -354,6 +326,23 @@ Workflow Install-Hephaestus
             # Display full path in the title bar of Windows Explorer
             #Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState -Key FullPath -Value 1
         } # Sequence
+
+        # Configure Docker
+        # TODO: PHP 5.6 (32bit)
+        # TODO: PHP 5.6 (64bit)
+        # TODO: Microsoft ODBC Driver for SQL Server 11
+        # Install MsSQL-ODBC-11.msi
+        # TODO: Microsoft PHP Driver for SQL Server 3.2
+        # Install PHP extension MsSQL-PHP-3.2.exe to PHP 5.6 ext/ directory
+        # Enable PHP extension in PHP 5.6
+
+        # TODO: PHP 7.0 (32bit)
+        # TODO: PHP 7.0 (64bit)
+        # TODO: Microsoft ODBC Driver for SQL Server 13.1
+        # Install MsSQL-ODBC-13.1.msi
+        # TODO: Microsoft PHP Driver for SQL Server 4.0
+        # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.0 ext/ directory
+        # Enable PHP extension in PHP 7.0
 
         # Configure WSL
         Sequence {
