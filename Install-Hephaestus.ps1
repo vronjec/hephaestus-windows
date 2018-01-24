@@ -83,6 +83,11 @@ function Install-DesktopApplication ($Name, $FileType, $ArgumentList, $Uri) {
     Remove-Item "$FilePath"
 }
 
+function Remove-WindowsApp ($Name) {
+    Get-AppxPackage -Name "$Name" -AllUsers | Remove-AppxPackage -AllUsers
+    Get-AppxProvisionedPackage -Online | Where-Object DisplayName -EQ "$Name" | Remove-AppxProvisionedPackage -Online
+}
+
 function Remove-DesktopItem ($Item) {
     $OneDrivePath = "${env:USERPROFILE}\OneDrive\Desktop\${Item}"
     $PublicPath = "${env:PUBLIC}\Desktop\${Item}"
@@ -115,11 +120,11 @@ function Remove-StartupItem ($Item) {
 }
 
 function Set-RegistryKey ($Path, $Key, $Value) {
-    if (-Not (Test-Path -Path $Path)) {
-        New-Item -Path $Path -Force | Out-Null
-        New-ItemProperty -Path $Path -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
+    if (-Not (Test-Path -Path "$Path")) {
+        New-Item -Path "$Path" -Force | Out-Null
+        New-ItemProperty -Path "$Path" -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
     } else {
-        New-ItemProperty -Path $Path -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
+        New-ItemProperty -Path "$Path" -Name $Key -Value $Value -PropertyType DWORD -Force | Out-Null
     }
 }
 
@@ -254,26 +259,24 @@ Workflow Install-Hephaestus
             Remove-StartupItem -Item "Persistence"
         } # Sequence
 
-        # Remove bloatware apps
+        # Remove universal apps
         Sequence {
-            Get-AppxPackage "89006A2E.AutodeskSketchBook" | Remove-AppxPackage
-            Get-AppxPackage *bingnews* | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage
-            Get-AppxPackage *disneymagic* | Remove-AppxPackage
-            Get-AppxPackage *empires* | Remove-AppxPackage
-            Get-AppxPackage *king.com.* | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.GetHelp" | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.Getstarted" | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.Messaging" | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.MicrosoftOfficeHub" | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.Office.OneNote" | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.Windows.Photos" | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.SkypeApp" | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.MicrosoftSolitaireCollection" | Remove-AppxPackage
-            Get-AppxPackage *winzip*| Remove-AppxPackage
-            Get-AppxPackage *xboxapp* | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
-            Get-AppxPackage "Microsoft.ZuneVideo" | Remove-AppxPackage
+            Remove-WindowsApp -Name "89006A2E.AutodeskSketchBook"
+            Remove-WindowsApp -Name "A278AB0D.DisneyMagicKingdoms"
+            Remove-WindowsApp -Name "king.com.CandyCrushSaga"
+            Remove-WindowsApp -Name "king.com.CandyCrushSodaSaga"
+            Remove-WindowsApp -Name "A278AB0D.MarchofEmpires"
+            Remove-WindowsApp -Name "Microsoft.BingFinance"
+            Remove-WindowsApp -Name "Microsoft.BingNews"
+            Remove-WindowsApp -Name "Microsoft.BingSports"
+            Remove-WindowsApp -Name "Microsoft.BingWeather"
+            Remove-WindowsApp -Name "Microsoft.MicrosoftOfficeHub"
+            Remove-WindowsApp -Name "Microsoft.MicrosoftSolitaireCollection"
+            Remove-WindowsApp -Name "Microsoft.Office.OneNote"
+            Remove-WindowsApp -Name "Microsoft.XboxApp"
+            Remove-WindowsApp -Name "Microsoft.ZuneMusic"
+            Remove-WindowsApp -Name "Microsoft.ZuneVideo"
+            Remove-WindowsApp -Name "WinZipComputing.WinZipUniversal"
         } # Sequence
 
         # Configure Windows
@@ -284,7 +287,7 @@ Workflow Install-Hephaestus
             Set-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer -Name LockedStartLayout -Value 1
 
             # Prevent bloatware apps from returning
-            Set-RegistryKey -Path HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent -Key DisableWindowsConsumerFeatures -Value 1
+            Set-RegistryKey -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Cloud Content" -Key DisableWindowsConsumerFeatures -Value 1
 
             # Disable UAC
             Set-RegistryKey -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Key EnableLUA -Value 0
