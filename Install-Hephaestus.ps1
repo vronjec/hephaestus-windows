@@ -137,7 +137,7 @@ Workflow Install-Hephaestus
     # Disable fast startup to ease BIOS access
     powercfg /hibernate off
 
-    # Phase 1: Installation
+    # Phase 1: Automatic installation
     Parallel {
 
         # Install applications
@@ -260,7 +260,7 @@ Workflow Install-Hephaestus
     # Restart computer
     Restart-Computer -Wait
 
-    # Phase 2: Customization
+    # Phase 2: Automatic configuration and manual installation
     Parallel {
 
         # Set computer name and configure hardware-specific settings
