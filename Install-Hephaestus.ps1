@@ -378,10 +378,8 @@ Workflow Install-Hephaestus
 
         # Configure WSL
         Sequence {
-            # WSL> adduser wicwega
-            # WSL> adduser wicwega sudo
-            # WSL> apt-get install screenfetch tree lftp mc...
-            # CMD> ubuntu config --default-user wicwega
+            # WSL> sudo apt-get update && sudo apt-get upgrade -y
+            # WSL> sudo apt-get install lftp mc screenfetch tree
 
             # Install dotfiles
             Invoke-WebRequest "https://github.com/vronjec/dotfiles/archive/master.zip" -OutFile "$env:TEMP\dotfiles-master.zip"
