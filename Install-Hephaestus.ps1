@@ -234,51 +234,6 @@ Workflow Install-Hephaestus
             }
         }
 
-        # Remove desktop icons and unused startup applications
-        Sequence {
-            Remove-DesktopItem -Item "Google Chrome.lnk"
-            Remove-DesktopItem -Item "Firefox.lnk"
-            Remove-DesktopItem -Item "Skype.lnk"
-            Remove-DesktopItem -Item "MPC-HC x64.lnk"
-            Remove-DesktopItem -Item "PeaZip.lnk"
-            Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
-            Remove-DesktopItem -Item "FileOptimizer.lnk"
-            Remove-DesktopItem -Item "Le VPN.lnk"
-            Remove-DesktopItem -Item "Docker for Windows.lnk"
-            Remove-DesktopItem -Item "Spotify.lnk"
-            Remove-DesktopItem -Item "Steam.lnk"
-            Remove-DesktopItem -Item "desktop.ini"
-
-            Remove-StartupItem -Item "Send to OneNote"
-            Remove-StartupItem -Item "Skype"
-            Remove-StartupItem -Item "Spotify Web Helper"
-
-            # Disable Intel HD Graphics tray icon
-            Remove-StartupItem -Item "IgfxTray"
-            Remove-StartupItem -Item "HotKeysCmds"
-            Remove-StartupItem -Item "Persistence"
-        } # Sequence
-
-        # Remove universal apps
-        Sequence {
-            Remove-WindowsApp -Name "89006A2E.AutodeskSketchBook"
-            Remove-WindowsApp -Name "A278AB0D.DisneyMagicKingdoms"
-            Remove-WindowsApp -Name "king.com.CandyCrushSaga"
-            Remove-WindowsApp -Name "king.com.CandyCrushSodaSaga"
-            Remove-WindowsApp -Name "A278AB0D.MarchofEmpires"
-            Remove-WindowsApp -Name "Microsoft.BingFinance"
-            Remove-WindowsApp -Name "Microsoft.BingNews"
-            Remove-WindowsApp -Name "Microsoft.BingSports"
-            Remove-WindowsApp -Name "Microsoft.BingWeather"
-            Remove-WindowsApp -Name "Microsoft.MicrosoftOfficeHub"
-            Remove-WindowsApp -Name "Microsoft.MicrosoftSolitaireCollection"
-            Remove-WindowsApp -Name "Microsoft.Office.OneNote"
-            Remove-WindowsApp -Name "Microsoft.XboxApp"
-            Remove-WindowsApp -Name "Microsoft.ZuneMusic"
-            Remove-WindowsApp -Name "Microsoft.ZuneVideo"
-            Remove-WindowsApp -Name "WinZipComputing.WinZipUniversal"
-        } # Sequence
-
         # Configure Windows
         Sequence {
             # Apply Start Menu and Quick Launch layout
@@ -330,23 +285,6 @@ Workflow Install-Hephaestus
             #Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState -Key FullPath -Value 1
         } # Sequence
 
-        # Configure Docker
-        # TODO: PHP 5.6 (32bit)
-        # TODO: PHP 5.6 (64bit)
-        # TODO: Microsoft ODBC Driver for SQL Server 11
-        # Install MsSQL-ODBC-11.msi
-        # TODO: Microsoft PHP Driver for SQL Server 3.2
-        # Install PHP extension MsSQL-PHP-3.2.exe to PHP 5.6 ext/ directory
-        # Enable PHP extension in PHP 5.6
-
-        # TODO: PHP 7.0 (32bit)
-        # TODO: PHP 7.0 (64bit)
-        # TODO: Microsoft ODBC Driver for SQL Server 13.1
-        # Install MsSQL-ODBC-13.1.msi
-        # TODO: Microsoft PHP Driver for SQL Server 4.0
-        # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.0 ext/ directory
-        # Enable PHP extension in PHP 7.0
-
         # Configure WSL
         Sequence {
             # WSL> sudo apt-get update && sudo apt-get upgrade -y
@@ -365,6 +303,68 @@ Workflow Install-Hephaestus
             #Move-Item -Path "$env:TEMP\keyfiles-master\keyfiles-master\.ssh" -Destination "$env:USERPROFILE"
             #Remove-Item -Recurse "$env:TEMP\keyfiles-master"
             #Remove-Item "$env:TEMP\keyfiles-master.zip"
+        } # Sequence
+
+        # Configure Docker
+        # TODO: PHP 5.6 (32bit)
+        # TODO: PHP 5.6 (64bit)
+        # TODO: Microsoft ODBC Driver for SQL Server 11
+        # Install MsSQL-ODBC-11.msi
+        # TODO: Microsoft PHP Driver for SQL Server 3.2
+        # Install PHP extension MsSQL-PHP-3.2.exe to PHP 5.6 ext/ directory
+        # Enable PHP extension in PHP 5.6
+
+        # TODO: PHP 7.0 (32bit)
+        # TODO: PHP 7.0 (64bit)
+        # TODO: Microsoft ODBC Driver for SQL Server 13.1
+        # Install MsSQL-ODBC-13.1.msi
+        # TODO: Microsoft PHP Driver for SQL Server 4.0
+        # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.0 ext/ directory
+        # Enable PHP extension in PHP 7.0
+
+        # Remove desktop icons and unused startup applications
+        Sequence {
+            Remove-DesktopItem -Item "Google Chrome.lnk"
+            Remove-DesktopItem -Item "Firefox.lnk"
+            Remove-DesktopItem -Item "Skype.lnk"
+            Remove-DesktopItem -Item "MPC-HC x64.lnk"
+            Remove-DesktopItem -Item "PeaZip.lnk"
+            Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
+            Remove-DesktopItem -Item "FileOptimizer.lnk"
+            Remove-DesktopItem -Item "Le VPN.lnk"
+            Remove-DesktopItem -Item "Docker for Windows.lnk"
+            Remove-DesktopItem -Item "Spotify.lnk"
+            Remove-DesktopItem -Item "Steam.lnk"
+            Remove-DesktopItem -Item "desktop.ini"
+
+            Remove-StartupItem -Item "Send to OneNote"
+            Remove-StartupItem -Item "Skype"
+            Remove-StartupItem -Item "Spotify Web Helper"
+
+            # Disable Intel HD Graphics tray icon
+            Remove-StartupItem -Item "IgfxTray"
+            Remove-StartupItem -Item "HotKeysCmds"
+            Remove-StartupItem -Item "Persistence"
+        } # Sequence
+
+        # Remove universal apps
+        Sequence {
+            Remove-WindowsApp -Name "89006A2E.AutodeskSketchBook"
+            Remove-WindowsApp -Name "A278AB0D.DisneyMagicKingdoms"
+            Remove-WindowsApp -Name "king.com.CandyCrushSaga"
+            Remove-WindowsApp -Name "king.com.CandyCrushSodaSaga"
+            Remove-WindowsApp -Name "A278AB0D.MarchofEmpires"
+            Remove-WindowsApp -Name "Microsoft.BingFinance"
+            Remove-WindowsApp -Name "Microsoft.BingNews"
+            Remove-WindowsApp -Name "Microsoft.BingSports"
+            Remove-WindowsApp -Name "Microsoft.BingWeather"
+            Remove-WindowsApp -Name "Microsoft.MicrosoftOfficeHub"
+            Remove-WindowsApp -Name "Microsoft.MicrosoftSolitaireCollection"
+            Remove-WindowsApp -Name "Microsoft.Office.OneNote"
+            Remove-WindowsApp -Name "Microsoft.XboxApp"
+            Remove-WindowsApp -Name "Microsoft.ZuneMusic"
+            Remove-WindowsApp -Name "Microsoft.ZuneVideo"
+            Remove-WindowsApp -Name "WinZipComputing.WinZipUniversal"
         } # Sequence
 
     } # Parallel
