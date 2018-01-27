@@ -36,7 +36,7 @@ development machine.
         *   Windows Subsystem for Linux (WSL)
 * **Phase 2: Automatic configuration and manual installation** (after automatic restart)
     *   Applies Start Menu and Quick Launch layout (requires restart to take effect)
-* **Phase 3: Clean up** (after manual restart)
+* **Phase 3: Automatic customization and clean up** (after manual restart)
     *   Unlocks Start Menu and Quick Launch layout (requires restart to take effect)
     *   Empties Recycle Bin
     *   Creates system restore point

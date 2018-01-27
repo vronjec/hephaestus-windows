@@ -148,7 +148,11 @@ Workflow Install-Hephaestus
     # Disable fast startup to ease BIOS access
     powercfg /hibernate off
 
-    # Phase 1: Automatic installation
+    ##
+    # Phase 1
+    #
+
+    # Automatic installation
     Parallel {
 
         # Install desktop applications
@@ -218,7 +222,11 @@ Workflow Install-Hephaestus
     # Restart computer
     Restart-Computer -Wait
 
-    # Phase 2: Automatic configuration and manual installation
+    ##
+    # Phase 2
+    #
+
+    # Automatic configuration
     Parallel {
 
         # Set computer name and configure hardware-specific settings
@@ -285,6 +293,96 @@ Workflow Install-Hephaestus
             #Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState -Key FullPath -Value 1
         } # Sequence
 
+        # Remove desktop icons and startup applications
+        Sequence {
+            Remove-DesktopItem -Item "Google Chrome.lnk"
+            Remove-DesktopItem -Item "Firefox.lnk"
+            Remove-DesktopItem -Item "Skype.lnk"
+            Remove-DesktopItem -Item "MPC-HC x64.lnk"
+            Remove-DesktopItem -Item "PeaZip.lnk"
+            Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
+            Remove-DesktopItem -Item "FileOptimizer.lnk"
+            Remove-DesktopItem -Item "Le VPN.lnk"
+            Remove-DesktopItem -Item "Docker for Windows.lnk"
+            Remove-DesktopItem -Item "Spotify.lnk"
+            Remove-DesktopItem -Item "Steam.lnk"
+            Remove-DesktopItem -Item "desktop.ini"
+
+            Remove-StartupItem -Item "Send to OneNote"
+            Remove-StartupItem -Item "Skype"
+            Remove-StartupItem -Item "Spotify Web Helper"
+
+            # Disable Intel HD Graphics tray icon
+            Remove-StartupItem -Item "IgfxTray"
+            Remove-StartupItem -Item "HotKeysCmds"
+            Remove-StartupItem -Item "Persistence"
+        } # Sequence
+
+        # Remove Microsoft Store apps
+        Sequence {
+            Remove-WindowsApp -Name "89006A2E.AutodeskSketchBook"
+            Remove-WindowsApp -Name "A278AB0D.DisneyMagicKingdoms"
+            Remove-WindowsApp -Name "king.com.CandyCrushSaga"
+            Remove-WindowsApp -Name "king.com.CandyCrushSodaSaga"
+            Remove-WindowsApp -Name "A278AB0D.MarchofEmpires"
+            Remove-WindowsApp -Name "Microsoft.BingFinance"
+            Remove-WindowsApp -Name "Microsoft.BingNews"
+            Remove-WindowsApp -Name "Microsoft.BingSports"
+            Remove-WindowsApp -Name "Microsoft.BingWeather"
+            Remove-WindowsApp -Name "Microsoft.MicrosoftOfficeHub"
+            Remove-WindowsApp -Name "Microsoft.MicrosoftSolitaireCollection"
+            Remove-WindowsApp -Name "Microsoft.Office.OneNote"
+            Remove-WindowsApp -Name "Microsoft.XboxApp"
+            Remove-WindowsApp -Name "Microsoft.ZuneMusic"
+            Remove-WindowsApp -Name "Microsoft.ZuneVideo"
+            Remove-WindowsApp -Name "WinZipComputing.WinZipUniversal"
+        } # Sequence
+
+    } # Parallel
+
+    # Manual installation
+    Parallel {
+
+        # Enlist Microsoft Store apps to install
+        Sequence {
+            $SlackLink = "microsoft.com/store/apps/9wzdncrdk3wp"
+            $SpotifyLink = "microsoft.com/store/apps/9ncbcszsjrsb"
+            $TrelloLink = "microsoft.com/store/apps/9nblggh4xxvw"
+            $UbuntuLink = "microsoft.com/store/apps/9nblggh4msv6"
+
+            # Open enlisted apps as browser tabs
+            Start-Process -FilePath chrome.exe -ArgumentList "$SlackLink $SpotifyLink $TrelloLink $UbuntuLink" -Wait
+        } # Sequence
+
+        # Open launchers to install applications
+        Sequence {
+            # Open Adobe Creative Cloud
+            Start-Process "${env:ProgramFiles(x86)}\Adobe\Adobe Creative Cloud\ACC\Creative Cloud.exe"
+
+            # Open JetBrains Toolbox
+            Start-Process -FilePath "$env:LOCALAPPDATA\JetBrains\Toolbox\bin\jetbrains-toolbox.exe"
+        } # Sequence
+
+    } # Parallel
+
+    # Suspend workflow until next logon
+    Suspend-Workflow
+
+    ##
+    # Phase 3
+    #
+
+    # Automatic customization
+    Parallel {
+
+        # Configure VPN
+        Sequence {
+            Add-VpnConnection -Name "Le VPN (Hungary)" -ServerAddress "hu.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
+            Add-VpnConnection -Name "Le VPN (Serbia)" -ServerAddress "rs.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
+            Add-VpnConnection -Name "Le VPN (United Kingdom)" -ServerAddress "uk.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
+            Add-VpnConnection -Name "Le VPN (United States)" -ServerAddress "us.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
+        }
+
         # Configure WSL
         Sequence {
             # WSL> sudo apt-get update && sudo apt-get upgrade -y
@@ -322,57 +420,9 @@ Workflow Install-Hephaestus
         # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.0 ext/ directory
         # Enable PHP extension in PHP 7.0
 
-        # Remove desktop icons and unused startup applications
-        Sequence {
-            Remove-DesktopItem -Item "Google Chrome.lnk"
-            Remove-DesktopItem -Item "Firefox.lnk"
-            Remove-DesktopItem -Item "Skype.lnk"
-            Remove-DesktopItem -Item "MPC-HC x64.lnk"
-            Remove-DesktopItem -Item "PeaZip.lnk"
-            Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
-            Remove-DesktopItem -Item "FileOptimizer.lnk"
-            Remove-DesktopItem -Item "Le VPN.lnk"
-            Remove-DesktopItem -Item "Docker for Windows.lnk"
-            Remove-DesktopItem -Item "Spotify.lnk"
-            Remove-DesktopItem -Item "Steam.lnk"
-            Remove-DesktopItem -Item "desktop.ini"
-
-            Remove-StartupItem -Item "Send to OneNote"
-            Remove-StartupItem -Item "Skype"
-            Remove-StartupItem -Item "Spotify Web Helper"
-
-            # Disable Intel HD Graphics tray icon
-            Remove-StartupItem -Item "IgfxTray"
-            Remove-StartupItem -Item "HotKeysCmds"
-            Remove-StartupItem -Item "Persistence"
-        } # Sequence
-
-        # Remove universal apps
-        Sequence {
-            Remove-WindowsApp -Name "89006A2E.AutodeskSketchBook"
-            Remove-WindowsApp -Name "A278AB0D.DisneyMagicKingdoms"
-            Remove-WindowsApp -Name "king.com.CandyCrushSaga"
-            Remove-WindowsApp -Name "king.com.CandyCrushSodaSaga"
-            Remove-WindowsApp -Name "A278AB0D.MarchofEmpires"
-            Remove-WindowsApp -Name "Microsoft.BingFinance"
-            Remove-WindowsApp -Name "Microsoft.BingNews"
-            Remove-WindowsApp -Name "Microsoft.BingSports"
-            Remove-WindowsApp -Name "Microsoft.BingWeather"
-            Remove-WindowsApp -Name "Microsoft.MicrosoftOfficeHub"
-            Remove-WindowsApp -Name "Microsoft.MicrosoftSolitaireCollection"
-            Remove-WindowsApp -Name "Microsoft.Office.OneNote"
-            Remove-WindowsApp -Name "Microsoft.XboxApp"
-            Remove-WindowsApp -Name "Microsoft.ZuneMusic"
-            Remove-WindowsApp -Name "Microsoft.ZuneVideo"
-            Remove-WindowsApp -Name "WinZipComputing.WinZipUniversal"
-        } # Sequence
-
     } # Parallel
 
-    # Suspend workflow until next logon
-    Suspend-Workflow
-
-    # Phase 3: Clean up
+    # Clean up
 
     # Unlock Start Menu and Quick Launch layout
     Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name LockedStartLayout -Value 0
