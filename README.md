@@ -63,10 +63,10 @@ development machine.
 ## Recommendations
 
 *   Perform a clean installation of Windows 10 Pro Insider Preview 17025
-    or newer (for features to access published container ports using
+    or newer (for feature to access published container ports using
     localhost or 127.0.0.1)
-*   Link Microsoft account during installation to access otherwise
-    unavailable Insider Preview features
+*   Link Microsoft account and OneDrive during installation
+*   Install all updates before running script
 
 ## Installation
 
