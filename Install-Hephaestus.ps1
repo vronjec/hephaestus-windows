@@ -249,15 +249,6 @@ Workflow Install-Hephaestus
             Set-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer -Name StartLayoutFile -Value "$env:TEMP\StartLayout.xml"
             Set-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer -Name LockedStartLayout -Value 1
 
-            # Prevent bloatware apps from returning
-            Set-RegistryKey -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Cloud Content" -Key DisableWindowsConsumerFeatures -Value 1
-
-            # Disable UAC
-            Set-RegistryKey -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Key EnableLUA -Value 0
-
-            # Disable startup delay for Startup applications
-            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize -Key StartupDelayInMSec -Value 0
-
             # Show taskbar on main display only
             Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key MMTaskbarEnabled -Value 0
 
@@ -291,7 +282,24 @@ Workflow Install-Hephaestus
 
             # Display full path in the title bar of Windows Explorer
             #Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState -Key FullPath -Value 1
+
+            # Disable startup delay for Startup applications
+            Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize -Key StartupDelayInMSec -Value 0
+
+            # Disable UAC
+            Set-RegistryKey -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Key EnableLUA -Value 0
+
+            # Prevent bloatware apps from returning
+            Set-RegistryKey -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Cloud Content" -Key DisableWindowsConsumerFeatures -Value 1
         } # Sequence
+
+        # Configure VPN
+        Sequence {
+            Add-VpnConnection -Name "Le VPN (Hungary)" -ServerAddress "hu.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
+            Add-VpnConnection -Name "Le VPN (Serbia)" -ServerAddress "rs.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
+            Add-VpnConnection -Name "Le VPN (United Kingdom)" -ServerAddress "uk.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
+            Add-VpnConnection -Name "Le VPN (United States)" -ServerAddress "us.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
+        }
 
         # Remove desktop icons and startup applications
         Sequence {
@@ -374,14 +382,6 @@ Workflow Install-Hephaestus
 
     # Automatic customization
     Parallel {
-
-        # Configure VPN
-        Sequence {
-            Add-VpnConnection -Name "Le VPN (Hungary)" -ServerAddress "hu.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
-            Add-VpnConnection -Name "Le VPN (Serbia)" -ServerAddress "rs.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
-            Add-VpnConnection -Name "Le VPN (United Kingdom)" -ServerAddress "uk.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
-            Add-VpnConnection -Name "Le VPN (United States)" -ServerAddress "us.le-vpn.com" -TunnelType L2tp -L2tpPsk "levpnsecret" -AuthenticationMethod MSChapv2 -RememberCredential -EncryptionLevel Required -Force
-        }
 
         # Configure WSL
         Sequence {

@@ -7,7 +7,7 @@ development machine.
 
 ## Features
 
-* **Phase 1: Automatic installation**
+*   **Phase 1: Automatic installation**
     *   Installs browsers and messaging applications
         *   Google Chrome with LastPass browser extension
         *   Mozilla Firefox
@@ -17,27 +17,41 @@ development machine.
         *   Microsoft Office 365 Personal
         *   PeaZip archiver utility
     *   Installs graphic design applications and utilities
-        *   Adobe Creative Cloud app (for manual installation of Adobe apps)
-        *   FileOptimizer lossless file optimizer
+        *   Adobe Creative Cloud application launcher
+        *   FileOptimizer file optimizer
     *   Installs software development applications and utilities
         *   Cyberduck FTP and cloud storage client
         *   Git version control software
-        *   Le VPN client
         *   Visual Studio Code source code editor
-        *   JetBrains Toolbox (for manual installation of JetBrains apps)
-        *   Docker CE for Windows
+        *   JetBrains Toolbox application launcher
+        *   Docker CE for Windows virtualization software
     *   Installs multimedia and entertainment applications
         *   Nomacs image viewer
         *   MPC-HC media player
-        *   Steam app (for manual installation of Steam games)
+        *   Steam application launcher
     *   Enables optional Windows features
         *   Hyper-V 
         *   Containers
         *   Windows Subsystem for Linux (WSL)
-* **Phase 2: Automatic configuration and manual installation** (after automatic restart)
-    *   Applies Start Menu and Quick Launch layout (requires restart to take effect)
-* **Phase 3: Automatic customization and clean up** (after manual restart)
-    *   Unlocks Start Menu and Quick Launch layout (requires restart to take effect)
+*   **Phase 2: Automatic configuration and manual installation** (after
+    automatic restart)
+    *   Removes unused desktop icons, startup applications and Windows
+        Store apps
+    *   Applies Start Menu and Quick Launch layout (requires restart to
+        take effect)
+    *   Configures Windows Explorer, Start Menu and taskbar
+    *   Configures VPN connections
+    *   Opens Google Chrome tabs with Microsoft Store apps to install
+        *   Slack
+        *   Spotify
+        *   Trello
+        *   Ubuntu
+    *   Opens Adobe Creative Cloud application launcher
+    *   Opens JetBrains Toolbox application launcher
+*   **Phase 3: Automatic configuration and clean up** (after manual
+    restart)
+    *   Unlocks Start Menu and Quick Launch layout (requires restart to
+        take effect)
     *   Empties Recycle Bin
     *   Creates system restore point
         
