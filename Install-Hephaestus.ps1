@@ -62,6 +62,50 @@ Set-Content -Path "$env:TEMP\StartLayout.xml" -Value @"
 </LayoutModificationTemplate>
 "@
 
+# Create default file asscoiations configuration file
+Set-Content -Path "$env:TEMP\DefaultAsscoiations.xml" -Value @"
+<?xml version="1.0" encoding="UTF-8"?>
+<DefaultAssociations>
+    <Association Identifier=".arw" ProgId="nomacs.arw.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".bmp" ProgId="nomacs.bmp.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".cr2" ProgId="nomacs.crw.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".crw" ProgId="nomacs.crw.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".dng" ProgId="nomacs.dng.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".epub" ProgId="AppXvepbp3z66accmsd0x877zbbxjctkpr6t" ApplicationName="Microsoft Edge" />
+    <Association Identifier=".gif" ProgId="nomacs.gif.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".htm" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+    <Association Identifier=".html" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+    <Association Identifier=".jpe" ProgId="nomacs.jpg.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".jpeg" ProgId="nomacs.jpg.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".jpg" ProgId="nomacs.jpg.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".mrw" ProgId="nomacs.mrw.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".nef" ProgId="nomacs.nef.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".nrw" ProgId="nomacs.nef.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".orf" ProgId="nomacs.orf.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".oxps" ProgId="Windows.XPSReachViewer" ApplicationName="XPS Viewer" />
+    <Association Identifier=".pdf" ProgId="AppXd4nrz8ff68srnhf9t5a8sbjyar1cr723" ApplicationName="Microsoft Edge" />
+    <Association Identifier=".pef" ProgId="nomacs.pef.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".pgm" ProgId="nomacs.pgm.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".png" ProgId="nomacs.png.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".ppm" ProgId="nomacs.ppm.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".psd" ProgId="Photoshop.Image.19" ApplicationName="Adobe Photoshop CC 2018" />
+    <Association Identifier=".raf" ProgId="nomacs.raf.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".raw" ProgId="nomacs.raw.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".rw2" ProgId="nomacs.raw.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".srw" ProgId="nomacs.srw.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".tif" ProgId="nomacs.tif.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".tiff" ProgId="nomacs.tif.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".url" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+    <Association Identifier=".website" ProgId="IE.AssocFile.WEBSITE" ApplicationName="Internet Explorer" />
+    <Association Identifier=".xbm" ProgId="nomacs.xbm.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".xpm" ProgId="nomacs.xpm.3" ApplicationName="nomacs - Image Lounge" />
+    <Association Identifier=".xps" ProgId="Windows.XPSReachViewer" ApplicationName="XPS Viewer" />
+    <Association Identifier="http" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+    <Association Identifier="https" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+    <Association Identifier="mailto" ProgId="ChromeHTML" ApplicationName="Google Chrome" />
+</DefaultAssociations>
+"@
+
 function Install-DesktopApplication ($Name, $FileType, $ArgumentList, $Uri) {
     $FilePath = "$env:TEMP\${Name}Setup.${FileType}"
 
@@ -249,6 +293,10 @@ Workflow Install-Hephaestus
             Set-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer -Name StartLayoutFile -Value "$env:TEMP\StartLayout.xml"
             Set-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer -Name LockedStartLayout -Value 1
 
+            # Apply default file asscoiations configuration file
+            New-Item -Path HKCU:\Software\Policies\Microsoft\Windows -Name System
+            Set-ItemProperty -Path HKCU:\Software\Policies\Microsoft\Windows\Explorer -Name DefaultAssociationsConfiguration -Value "$env:TEMP\DefaultAsscoiations.xml"
+
             # Show taskbar on main display only
             Set-RegistryKey -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Key MMTaskbarEnabled -Value 0
 
@@ -426,6 +474,9 @@ Workflow Install-Hephaestus
 
     # Unlock Start Menu and Quick Launch layout
     Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name LockedStartLayout -Value 0
+
+    # Unlock default file associations
+    Set-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name DefaultAssociationsConfiguration -Value 0
 
     # Empty Recycle Bin
     Clear-RecycleBin -Force
