@@ -487,7 +487,7 @@ Workflow Install-Hephaestus
     Checkpoint-Computer -Description "Setup after Hephaestus automation script" -RestorePointType APPLICATION_INSTALL
 
     # Unregister workflow resume task
-    Unregister-ScheduledTask -Name ResumeHephaestusSetup -Confirm:$false
+    Unregister-ScheduledTask -TaskName ResumeHephaestusSetup -Confirm:$false
 }
 
 # Create task to resume workflow after restart
