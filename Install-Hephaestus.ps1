@@ -22,7 +22,6 @@ Set-Content -Path "$env:TEMP\StartLayout.xml" -Value @"
                     <start:DesktopApplicationTile Row="2" Column="4" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\PowerPoint 2016.lnk" />
                     <start:DesktopApplicationTile Row="4" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Publisher 2016.lnk" />
                     <start:DesktopApplicationTile Row="4" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Word 2016.lnk" />
-                    <start:Tile                   Row="4" Column="4" Size="2x2"             AppUserModelID="45273LiamForsyth.PawsforTrello_7pb5ddty8z1pa!trello" />
                 </start:Group>
                 <start:Group Name="Development" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout">
                     <start:DesktopApplicationTile Row="0" Column="0" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\System Tools\Command Prompt.lnk" />
@@ -53,6 +52,7 @@ Set-Content -Path "$env:TEMP\StartLayout.xml" -Value @"
                 <taskbar:UWA                    AppUserModelID="91750D7E.Slack_8she8kybcnzg4!Slack" />
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Skype\Skype.lnk" />
                 <taskbar:UWA                    AppUserModelID="45273LiamForsyth.PawsforTrello_7pb5ddty8z1pa!trello" />
+                <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Visual Studio Code\Visual Studio Code.lnk" />
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\PhpStorm.lnk" />
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Adobe Photoshop CC 2018.lnk" />
                 <taskbar:UWA                    AppUserModelID="CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc!ubuntu" />
