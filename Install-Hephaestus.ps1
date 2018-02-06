@@ -280,6 +280,11 @@ Workflow Install-Hephaestus
                 #Set-Service –Name "bthserv" –StartupType "Automatic"
             }
 
+            "C7N0BC196913285" {
+                # Install official ATK driver for Windows 10 64 bit
+                #http://dlcdnet.asus.com/pub/ASUS/nb/Apps_for_Win10/ATKPackage/ATKPackage_Win10_64_VER100039.zip
+            }
+
             default {
                 Rename-Computer -NewName "hephaestus" -Force -WarningAction SilentlyContinue -ErrorAction SilentlyContinue
             }
