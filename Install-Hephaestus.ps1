@@ -224,7 +224,6 @@ Workflow Install-Hephaestus
             # TODO: Add version-agnostic download link to latest release
             Install-DesktopApplication -Name "Git" -FileType "exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"
 
-            Install-DesktopApplication -Name "LeVPN" -FileType "exe" -ArgumentList "/S" -Uri "https://www.le-vpn.com/clients/Le-VPN-Setup.exe"
             Install-DesktopApplication -Name "VSCode" -FileType "exe" -ArgumentList "/verysilent /suppressmsgboxes /mergetasks=!runcode,!desktopicon,quicklaunchicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
 
             # TODO: Add version-agnostic download link to latest release
