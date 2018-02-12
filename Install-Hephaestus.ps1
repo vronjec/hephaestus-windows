@@ -206,38 +206,18 @@ Workflow Install-Hephaestus
             Install-DesktopApplication -Name "Opera" -FileType "exe" -ArgumentList "/silent /allusers=yes /launchopera=no /desktopshortcut=no /setdefaultbrowser=no /pintotaskbar=no /startmenushortcut=yes" -Uri "https://net.geo.opera.com/opera/stable/windows"
             Install-DesktopApplication -Name "LastPass" -FileType "exe" -ArgumentList "--silinstall --userinstallchrome --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Uri "https://lastpass.com/download/cdn/lastpass_x64.exe"
             Install-DesktopApplication -Name "Skype" -FileType "exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
-
-            # TODO: Toggl Desktop
-            # https://toggl.com/api/v8/installer?app=td&platform=windows&channel=stable
-
             Install-DesktopApplication -Name "CreativeCloud" -FileType "exe" -ArgumentList "--mode=silent --action=install" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
             Install-DesktopApplication -Name "FileOptimizer" -FileType "exe" -ArgumentList "/S" -Uri "https://sourceforge.net/projects/nikkhokkho/files/latest/download?source=files"
             Install-DesktopApplication -Name "Nomacs" -FileType "msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
             Install-DesktopApplication -Name "MPC-HC" -FileType "exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
-
-            # TODO: Add version-agnostic download link to latest release
             Install-DesktopApplication -Name "PeaZip" -FileType "exe" -ArgumentList "/VERYSILENT" -Uri "http://www.peazip.org/downloads/peazip-6.5.0.WIN64.exe"
-
-            # TODO: Add version-agnostic download link to latest release
             Install-DesktopApplication -Name "Cyberduck" -FileType "exe" -ArgumentList "/quiet" -Uri "https://update.cyberduck.io/windows/Cyberduck-Installer-6.3.5.27408.exe"
 
             # TODO: Refine installation: https://github.com/msysgit/msysgit/wiki/Silent-or-Unattended-Installation
-            # TODO: Add version-agnostic download link to latest release
             Install-DesktopApplication -Name "Git" -FileType "exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"
 
             Install-DesktopApplication -Name "VSCode" -FileType "exe" -ArgumentList "/verysilent /suppressmsgboxes /mergetasks=!runcode,!desktopicon,quicklaunchicon,addcontextmenufiles,addcontextmenufolders,associatewithfiles,addtopath" -Uri "https://go.microsoft.com/fwlink/?Linkid=852157"
-
-            # TODO: Add version-agnostic download link to latest release
             Install-DesktopApplication -Name "JetBrains" -FileType "exe" -ArgumentList "/S /NoDesktopIcon" -Uri "https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.6.2914.exe"
-
-            # TODO: Java Development Kit
-            # TODO: Add version-agnostic download link to latest release
-            #Invoke-WebRequest "http://download.oracle.com/otn-pub/java/jdk/9.0.1+11/jdk-9.0.1_windows-x64_bin.exe" -OutFile "$env:TEMP\JDKSetup.exe"
-            #Start-Process -FilePath "$env:TEMP\JDKSetup.exe" -ArgumentList "/s STATIC=1 ADDLOCAL=ToolsFeature" -Wait
-
-            # TODO: Android Studio
-            # TODO: Visual Studio Emulator for Android (https://aka.ms/vscomemudownload)
-
             Install-DesktopApplication -Name "Docker" -FileType "exe" -ArgumentList "install --quiet" -Uri "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"
             Install-DesktopApplication -Name "Steam" -FileType "exe" -ArgumentList "/S" -Uri "https://steamcdn-a.akamaihd.net/client/installer/SteamSetup.exe"
         } # Sequence
