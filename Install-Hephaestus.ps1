@@ -56,6 +56,7 @@ Set-Content -Path "$env:TEMP\StartLayout.xml" -Value @"
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\PhpStorm.lnk" />
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Adobe Photoshop CC 2018.lnk" />
                 <taskbar:UWA                    AppUserModelID="CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc!ubuntu" />
+                <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\Toggl.lnk" />
             </taskbar:TaskbarPinList>
         </defaultlayout:TaskbarLayout>
     </CustomTaskbarLayoutCollection>
@@ -206,13 +207,14 @@ Workflow Install-Hephaestus
             Install-DesktopApplication -Name "Opera" -FileType "exe" -ArgumentList "/silent /allusers=yes /launchopera=no /desktopshortcut=no /setdefaultbrowser=no /pintotaskbar=no /startmenushortcut=yes" -Uri "https://net.geo.opera.com/opera/stable/windows"
             Install-DesktopApplication -Name "LastPass" -FileType "exe" -ArgumentList "--silinstall --userinstallchrome --userinstallff --userinstallie --noaddremove --nostartmenu --nohistory" -Uri "https://lastpass.com/download/cdn/lastpass_x64.exe"
             Install-DesktopApplication -Name "Skype" -FileType "exe" -ArgumentList "/VERYSILENT /SP- /NOCANCEL /NORESTART /SUPPRESSMSGBOXES /NOLAUNCH" -Uri "https://go.skype.com/classic.skype"
-            Install-DesktopApplication -Name "Nomacs" -FileType "msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
 
-            # TODO: Add version-agnostic download link to latest release
-            Install-DesktopApplication -Name "MPC-HC" -FileType "exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
+            # TODO: Toggl Desktop
+            # https://toggl.com/api/v8/installer?app=td&platform=windows&channel=stable
 
             Install-DesktopApplication -Name "CreativeCloud" -FileType "exe" -ArgumentList "--mode=silent --action=install" -Uri "http://ccmdls.adobe.com/AdobeProducts/KCCC/1/win32/CreativeCloudSet-Up.exe"
             Install-DesktopApplication -Name "FileOptimizer" -FileType "exe" -ArgumentList "/S" -Uri "https://sourceforge.net/projects/nikkhokkho/files/latest/download?source=files"
+            Install-DesktopApplication -Name "Nomacs" -FileType "msi" -ArgumentList "/passive" -Uri "http://download.nomacs.org/nomacs-setup-x64.msi"
+            Install-DesktopApplication -Name "MPC-HC" -FileType "exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
 
             # TODO: Add version-agnostic download link to latest release
             Install-DesktopApplication -Name "PeaZip" -FileType "exe" -ArgumentList "/VERYSILENT" -Uri "http://www.peazip.org/downloads/peazip-6.5.0.WIN64.exe"
