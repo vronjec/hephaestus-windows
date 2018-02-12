@@ -51,7 +51,6 @@ Set-Content -Path "$env:TEMP\StartLayout.xml" -Value @"
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Google Chrome.lnk" />
                 <taskbar:UWA                    AppUserModelID="91750D7E.Slack_8she8kybcnzg4!Slack" />
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Skype\Skype.lnk" />
-                <taskbar:UWA                    AppUserModelID="45273LiamForsyth.PawsforTrello_7pb5ddty8z1pa!trello" />
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Visual Studio Code\Visual Studio Code.lnk" />
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\PhpStorm.lnk" />
                 <taskbar:DesktopApp DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Adobe Photoshop CC 2018.lnk" />
@@ -409,7 +408,6 @@ Workflow Install-Hephaestus
         Sequence {
             $SlackLink = "microsoft.com/store/apps/9wzdncrdk3wp"
             $SpotifyLink = "microsoft.com/store/apps/9ncbcszsjrsb"
-            $TrelloLink = "microsoft.com/store/apps/9nblggh4xxvw"
             $UbuntuLink = "microsoft.com/store/apps/9nblggh4msv6"
 
             # Open enlisted apps as browser tabs
