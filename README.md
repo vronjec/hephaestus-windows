@@ -45,7 +45,6 @@ development machine.
     *   Opens Google Chrome tabs with Microsoft Store apps to install
         *   Slack
         *   Spotify
-        *   Trello
         *   Ubuntu
     *   Opens Adobe Creative Cloud application launcher
     *   Opens JetBrains Toolbox application launcher
