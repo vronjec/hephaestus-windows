@@ -2,7 +2,7 @@
 
 ## Introduction
 
-An automation script for installing and configuring a Windows 10-based
+An automation script to create and deploy a personalized Windows 10-based
 development machine.
 
 ## Features
