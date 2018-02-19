@@ -212,6 +212,7 @@ Workflow Install-Hephaestus
             Install-DesktopApplication -Name "MPC-HC" -FileType "exe" -ArgumentList "/SP- /VERYSILENT /NORESTART" -Uri "https://binaries.mpc-hc.org/MPC%20HomeCinema%20-%20x64/MPC-HC_v1.7.13_x64/MPC-HC.1.7.13.x64.exe"
             Install-DesktopApplication -Name "PeaZip" -FileType "exe" -ArgumentList "/VERYSILENT" -Uri "http://www.peazip.org/downloads/peazip-6.5.0.WIN64.exe"
             Install-DesktopApplication -Name "Cyberduck" -FileType "exe" -ArgumentList "/quiet" -Uri "https://update.cyberduck.io/windows/Cyberduck-Installer-6.3.5.27408.exe"
+            Install-DesktopApplication -Name "Clink" -FileType "exe" -ArgumentList "/S" -Uri "https://github.com/mridgers/clink/releases/download/0.4.9/clink_0.4.9_setup.exe"
 
             # TODO: Refine installation: https://github.com/msysgit/msysgit/wiki/Silent-or-Unattended-Installation
             Install-DesktopApplication -Name "Git" -FileType "exe" -ArgumentList "/SILENT /COMPONENTS='icons,ext\reg\shellhere,assoc,assoc_sh'" -Uri "https://github.com/git-for-windows/git/releases/download/v2.15.0.windows.1/Git-2.15.0-64-bit.exe"

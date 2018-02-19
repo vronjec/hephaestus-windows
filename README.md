@@ -21,6 +21,7 @@ development machine.
         *   FileOptimizer file optimizer
     *   Installs software development applications and utilities
         *   Cyberduck FTP and cloud storage client
+        *   [Clink](http://mridgers.github.io/clink) GNU Readline library for cmd.exe
         *   Git version control software
         *   Visual Studio Code source code editor
         *   JetBrains Toolbox application launcher
