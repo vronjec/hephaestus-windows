@@ -344,7 +344,6 @@ Workflow Install-Hephaestus
             Remove-DesktopItem -Item "PeaZip.lnk"
             Remove-DesktopItem -Item "Adobe Creative Cloud.lnk"
             Remove-DesktopItem -Item "FileOptimizer.lnk"
-            Remove-DesktopItem -Item "Le VPN.lnk"
             Remove-DesktopItem -Item "Docker for Windows.lnk"
             Remove-DesktopItem -Item "Spotify.lnk"
             Remove-DesktopItem -Item "Steam.lnk"
@@ -392,7 +391,7 @@ Workflow Install-Hephaestus
             $UbuntuLink = "microsoft.com/store/apps/9nblggh4msv6"
 
             # Open enlisted apps as browser tabs
-            Start-Process -FilePath chrome.exe -ArgumentList "$SlackLink $SpotifyLink $TrelloLink $UbuntuLink" -Wait
+            Start-Process -FilePath chrome.exe -ArgumentList "$SlackLink $SpotifyLink $UbuntuLink" -Wait
         } # Sequence
 
         # Open launchers to install applications
