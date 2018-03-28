@@ -36,7 +36,9 @@ Set-Content -Path "$env:TEMP\StartLayout.xml" -Value @"
                 </start:Group>
                 <start:Group Name="Design" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout">
                     <start:DesktopApplicationTile Row="0" Column="0" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Adobe Photoshop CC 2018.lnk" />
-                    <start:DesktopApplicationTile Row="0" Column="2" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\FileOptimizer\Launch FileOptimizer.lnk" />
+                    <start:DesktopApplicationTile Row="0" Column="2" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Adobe Illustrator CC 2018.lnk" />
+                    <start:DesktopApplicationTile Row="0" Column="4" Size="2x2" DesktopApplicationLinkPath="%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\Adobe Animate CC 2018.lnk" />
+                    <start:DesktopApplicationTile Row="2" Column="0" Size="2x2" DesktopApplicationLinkPath="%APPDATA%\Microsoft\Windows\Start Menu\Programs\FileOptimizer\Launch FileOptimizer.lnk" />
                 </start:Group>
                 <start:Group Name="Entertainment" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout">
                     <start:Tile                   Row="0" Column="0" Size="2x2"             AppUserModelID="SpotifyAB.SpotifyMusic_zpdnekdrzrea0!Spotify" />
