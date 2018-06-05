@@ -442,6 +442,9 @@ Workflow Install-Hephaestus
         # Install PHP extension MsSQL-PHP-4.0.exe to PHP 7.0 ext/ directory
         # Enable PHP extension in PHP 7.0
 
+        # TODO: Visual Studio Community 2017 with UWP
+        #https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15&rid=34353
+
     } # Parallel
 
     # Clean up
